@@ -15,7 +15,7 @@ public class CourseServiceImpl implements CourseService {
 	private CourseDAO courseDAO;
 
 	@Override
-	public boolean addCourse(Course course) {
+	public int addCourse(Course course) {
 		// TODO Validate course
 		return courseDAO.addCourse(course);
 	}
@@ -43,6 +43,11 @@ public class CourseServiceImpl implements CourseService {
 	public List<Course> getCoursesByUserId(int userId) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public List<Course> getCourseByCodeAndSemester(String code, String Semester) {
+		return courseDAO.getCourseByCodeAndSemester(code, Semester);
 	}
 
 }
