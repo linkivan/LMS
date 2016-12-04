@@ -22,21 +22,18 @@ public class CourseServiceImpl implements CourseService {
 
 	@Override
 	public boolean modifyCourse(Course course) {
-		return false;
-		// TODO Auto-generated method stub
+		return courseDAO.modifyCourse(course);
 
 	}
 
 	@Override
 	public Course getCourseById(int courseId) {
-		// TODO Auto-generated method stub
-		return null;
+		return courseDAO.getCourseById(courseId);
 	}
 
 	@Override
 	public boolean deleteCourse(int courseId) {
-		// TODO Auto-generated method stub
-		return false;
+		return courseDAO.deleteCourse(courseId);
 	}
 
 	@Override

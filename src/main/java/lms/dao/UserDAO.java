@@ -1,6 +1,6 @@
 package lms.dao;
 
-public interface UserDao {
+public interface UserDAO {
 
 	void updateFailAttempts(String username);
 

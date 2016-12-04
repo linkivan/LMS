@@ -44,21 +44,42 @@ public class CourseDAOImpl implements CourseDAO {
 
 	@Override
 	public boolean modifyCourse(Course course) {
-		return false;
-		// TODO Auto-generated method stub
-
+		final String sql = "update course set instructor_id = ?, room = ?, semester = ?, time = ?, code = ?"
+				+ " where id = ?";
+		jdbcTemplate.update(sql, course.getInstructorId(), course.getRoom(), course.getSemester(), course.getTime(),
+				course.getCode(), course.getId());
+		return true;
 	}
 
 	@Override
 	public Course getCourseById(int courseId) {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = "SELECT * FROM course WHERE id = ?";
+
+		Course res = jdbcTemplate.queryForObject(sql, new Object[] { courseId }, new RowMapper<Course>() {
+
+			@Override
+			public Course mapRow(ResultSet rs, int rowNum) throws SQLException {
+				Course course = new Course();
+
+				course.setId(rs.getInt("id"));
+				course.setCode(rs.getString("code"));
+				course.setSemester(rs.getString("semester"));
+				course.setRoom(rs.getString("room"));
+				course.setTime(rs.getString("time"));
+
+				return course;
+			}
+
+		});
+
+		return res;
 	}
 
 	@Override
 	public boolean deleteCourse(int courseId) {
-		// TODO Auto-generated method stub
-		return false;
+		String sql = "DELETE from course where id = ?";
+		this.jdbcTemplate.update(sql, courseId);
+		return true;
 	}
 
 	@Override

@@ -65,7 +65,7 @@
                             <li>
                                 <a href="#">PEOPLE</a>
                             </li>
-                            <sec:authorize access="hasRole('ROLE_INSTR') or hasRole('ROLE_STU')">
+                            <sec:authorize access="hasRole('ROLE_STU')">
                             <li>
                                 <a href="#">ASSIGNMENT</a>
                             </li>

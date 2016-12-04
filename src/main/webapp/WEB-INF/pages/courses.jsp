@@ -1,4 +1,5 @@
-<%@taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
+<%@taglib prefix="sec"
+	uri="http://www.springframework.org/security/tags"%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@page session="true"%>
@@ -9,6 +10,8 @@
 </head>
 <body>
 	<div id="wrapper">
+		<%@ include file="common/nav.jsp"%>
+		<!-- Page Content -->
 		<div id="page-wrapper">
 			<div class="container-fluid">
 
@@ -19,9 +22,7 @@
 				</div>
 
 				<!-- ... Your content goes here ... -->
-				<c:if test="${pageContext.request.userPrincipal.name != null}">
-					<h2>Hello ${pageContext.request.userPrincipal.name}!</h2>
-				</c:if>
+				
 				<c:if test="${not empty error}">
 					<div class="error">${error}</div>
 				</c:if>
@@ -29,20 +30,28 @@
 					<div class="msg">${msg}</div>
 				</c:if>
 				<div id="search panel">
-					<form action="<c:url value='/courses' />" method="get">
-						Code: <input type="text" name="code" class="form-group"><br>
-						Semester: <select name="semester" class="form-group">
+					<form action="<c:url value='/courses' />" method="get" class = "form-inline">
+						<div  class = "form-group">
+						<label for="code">Code: </label>
+						<input type="text" id="code" name="code" class="form-control">
+					</div>
+					<div  class = "form-group ml20">
+						<label for="code">Semester: </label>
+						<select name="semester" id="semester" class="form-control" >
+							<option value="Select">Select</option>
 							<option value="Fall2016">Fall2016</option>
 							<option value="Winter2016">Winter2016</option>
 							<option value="Spring2017">Spring2017</option>
 							<option value="Summer2017">Summer2017</option>
-						</select><br> <input type="submit" value="Search Course">
+						</select>
+					</div>
+					<input class="btn btn-primary ml20" type="submit" value="Search Course">
+					<a href="<c:url value='/courses/new' />" class="btn btn-primary ml20">Add Course</a>
 					</form>
-					<a href="<c:url value='/courses/new' />">add course</a>
 				</div>
 				<c:if test="${ not empty courses}">
 					<div id="courses">
-						<table>
+						<table class="table table-striped table-bordered table-hover">
 							<tr>
 								<th>Id</th>
 								<th>Code</th>
@@ -50,27 +59,41 @@
 								<th>Action</th>
 							</tr>
 							<c:forEach var="courses" items="${courses}">
-								<tr>
-									<td>${courses.id}</td>
-									<td>${courses.code}</td>
-									<td>${courses.semester}</td>
-									<td><a href="<c:url value='/course/${courses.id}' />">View</a>
-										<a id="delete-course"
-										href="<c:url value='/course/${courses.id}'/>">Delete</a></td>
-								</tr>
+							<tr>
+								<td>${courses.id}</td>
+								<td>${courses.code}</td>
+								<td>${courses.semester}</td>
+								<td>
+									<a href="<c:url value='/course/${courses.id}' />">View</a>
+									<a id="delete-course" href="javascript:formSubmit()">Delete</a>
+								</td>
+							</tr>
+							<form action="<c:url value='/course/${courses.id}'/>" method="post" id="deleteForm">
+								<input type="hidden" name="${_csrf.parameterName}"
+									value="${_csrf.token}" />
+								<input type="hidden" name="_method" value="delete" />  
+							</form>
+							
+							<script>
+								function formSubmit() {
+									document.getElementById("deleteForm").submit();
+								}
+							</script>
 							</c:forEach>
 						</table>
 					</div>
 				</c:if>
 				<c:if test="${empty courses}">
-		        No course found!
-	    	</c:if>
+			        <div class="alert alert-danger">
+	                   No course found!
+	                </div>
+	    		</c:if>
 			</div>
 		</div>
 
 	</div>
 
-	<%@ include file="common/nav.jsp"%>
+
 </body>
 <%@ include file="common/footer.jsp"%>
 </html>
