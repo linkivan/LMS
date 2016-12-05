@@ -5,7 +5,7 @@ import java.util.List;
 import lms.model.AssignResponseModel;
 
 public interface AssignResponseDAO {
-	public int addAssignResponse(AssignResponseModel assignRes, int fileId);
+	public boolean addAssignResponse(AssignResponseModel assignRes, int fileId);
 	
 	public boolean updateAssignResponseById(int assignResId);
 	
