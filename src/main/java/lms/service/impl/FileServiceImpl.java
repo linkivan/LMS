@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import lms.dao.CourseDAO;
 import lms.dao.FileDAO;
 import lms.model.CourseModel;
+import lms.model.FileModel;
 import lms.service.FileService;
 
 @Service
@@ -15,33 +16,32 @@ public class FileServiceImpl implements FileService {
 	private FileDAO fileDAO;
 
 	@Override
-	public String createSyllabus(FileItem syllabus, CourseModel course, String uploaderName) {
+	public int createSyllabus(FileItem syllabus, CourseModel course, String uploaderName) {
 		// TODO Auto-generated method stub
-		return null;
+		return 0;
 	}
 
 	@Override
-	public String createAssignmentResponse(FileItem responeFile, CourseModel course, String assignmentName,
+	public int createAssignmentResponse(FileItem responeFile, CourseModel course, String assignmentName,
 			String username) {
 		// TODO Auto-generated method stub
-		return null;
+		return 0;
 	}
 
 	@Override
-	public String createAssignmentFile(FileItem responeFile, CourseModel course, String assignmentName,
-			String username) {
+	public int createAssignmentFile(FileItem responeFile, CourseModel course, String assignmentName, String username) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public FileModel getPathByFileId(int fileId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public String getPathByFileId(int fileId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getSyllabusPathByCourseId(int CourseId) {
+	public FileModel getSyllabusPathByCourseId(int CourseId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
