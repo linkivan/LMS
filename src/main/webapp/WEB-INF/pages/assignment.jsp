@@ -163,7 +163,7 @@
 								<div class="form-group">
 									<label for="inputcode" class="col-sm-2 control-label ">File:</label>
 									<div class="col-sm-3">
-										<label for="inputcode" class="col-sm-2 control-label ">**********</label>
+										<label for="inputcode" class="col-sm-2 control-label ">${filePath}</label>
 									</div>
 								</div>
 								<div class="form-group">

@@ -32,8 +32,8 @@
 					</c:if>
 
 					<form name='assignmentForm' class="form-horizontal"
-						action="<c:url value='/course/${course.id}/assignments' />"
-						method='POST'>
+						action="<c:url value='/course/${course.id}/assignments?${_csrf.parameterName}=${_csrf.token}' />"
+						method='POST' enctype="multipart/form-data">
 						<div class="form-group row">
 							<label  class="col-sm-2 control-label ">Name:</label>
 							<div class="col-sm-3">
@@ -85,7 +85,7 @@
 						<div class="form-group row">
 							<label for="inputcode" class="col-sm-2 control-label ">File:</label>
 							<div class="col-sm-3">
-								<input type="file" class="form-control-file">
+								<input type="file" class="form-control-file" name="fileUpload">
 							</div>
 						</div>
 						<div class="form-group row">
@@ -106,9 +106,6 @@
 									onclick="history.back()">Cancel</button>
 							</div>
 						</div>
-
-						<input type="hidden" name="${_csrf.parameterName}"
-							value="${_csrf.token}" />
 					</form>
 				</div>
 			</div>

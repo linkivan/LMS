@@ -4,18 +4,23 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import lms.model.AssignmentModel;
 import lms.model.CourseModel;
+import lms.model.FileModel;
 import lms.model.UIMenu;
 import lms.service.AssignmentService;
 import lms.service.CourseService;
+import lms.service.FileService;
 
 @Controller
 @RequestMapping(value = "/course/{courseId}")
@@ -24,6 +29,8 @@ public class AssignmentController {
 	private AssignmentService assignmentService;
 	@Autowired
 	private CourseService courseService;
+	@Autowired
+	private FileService fileService;
 
 	@RequestMapping(value = "/assignments", method = RequestMethod.GET)
 	public ModelAndView assignmentsPage(@PathVariable("courseId") int courseId) {
@@ -51,9 +58,10 @@ public class AssignmentController {
 
 	@Secured("ROLE_INSTR")
 	@RequestMapping(value = "/assignments", method = RequestMethod.POST)
-	public String addAssignment(@PathVariable("courseId") int courseId, AssignmentModel assignment) {
+	public String addAssignment(@PathVariable("courseId") int courseId, AssignmentModel assignment,
+			@RequestParam CommonsMultipartFile fileUpload, Authentication authentication) {
 		assignment.setCourseId(courseId);
-		int id = assignmentService.addAssignment(assignment);
+		int id = assignmentService.addAssignment(assignment, fileUpload.getFileItem());
 		return "redirect:/course/" + courseId + "/assignment/" + id;
 	}
 
@@ -61,10 +69,12 @@ public class AssignmentController {
 	public ModelAndView assignmentPage(@PathVariable("courseId") int courseId, @PathVariable("id") int id) {
 		ModelAndView model = new ModelAndView();
 		AssignmentModel assignment = assignmentService.getAssignmentById(id);
+		FileModel fileModel = fileService.getPathByFileId(assignment.getFileId());
 		CourseModel course = courseService.getCourseById(courseId);
 		model.addObject("uiMenu", new UIMenu(course.getCode(), 2, true));
 		model.addObject("course", course);
 		model.addObject("id", id);
+		model.addObject("fileModel", fileModel);
 		model.addObject("assignment", assignment);
 		model.setViewName("assignment");
 		return model;
