@@ -31,13 +31,11 @@
 								<label for="inputcode" class="col-sm-2 control-label ">
 									Current Syllabus </label>
 								<div class="col-sm-3">
-									<a for="inputcode" class="col-sm-2 control-label " href="">Syllabus_enpm613.doc</a><br />
-									<br /> <a class="col-sm-2 control-label" href="">Delete</a>
+									<a class="col-sm-2 control-label " href="<c:url value='/course/${course.id}/files/${syllabus.fileName}?fileLocation=${syllabus.fileLocation}' />">${syllabus.fileName}</a><br />
 								</div>
 							</div>
 							<div class="form-group">
-								<label for="inputcode" class="col-sm-2 control-label ">New
-									Syllabus</label>
+								<label for="inputcode" class="col-sm-2 control-label ">New Syllabus</label>
 								<div class="col-sm-3">
 									<input type="file" name="fileUpload">
 								</div>
@@ -57,7 +55,7 @@
 
 							<div class="form-group">
 								<div class="col-sm-3">
-									<a class="col-sm-2 control-label " href="">Syllabus_enpm613.doc</a>
+									<a class="col-sm-2 control-label " href="<c:url value='/course/${course.id}/files/${syllabus.fileName}?fileLocation=${syllabus.fileLocation}' />">${syllabus.fileName}</a>
 
 								</div>
 							</div>

@@ -60,6 +60,6 @@ public class SyllabusController {
 		CourseModel course = courseService.getCourseById(courseId);
 		FileItem syllabus = fileUpload.getFileItem();
 		fileService.createSyllabus(syllabus, course, authentication.getName());
-		return "redirect:/course" + courseId + "/syllabus";
+		return "redirect:/course/" + courseId + "/syllabus";
 	}
 }

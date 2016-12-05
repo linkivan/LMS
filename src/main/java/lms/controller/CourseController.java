@@ -1,6 +1,17 @@
 package lms.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -92,6 +103,26 @@ public class CourseController {
 		courseService.modifyCourse(course);
 		return "redirect:/course/" + id;
 
+	}
+
+	@RequestMapping(value = "/course/{id}/files/{fileName:.+}", method = RequestMethod.GET)
+	public void downloadPDFResource(HttpServletRequest request, HttpServletResponse response,
+			@PathVariable("fileName") String fileName, String fileLocation) {
+		// If user is not authorized - he should be thrown out from here itself
+
+		// Authorized user will download the file
+		String dataDirectory = request.getServletContext().getRealPath(fileLocation);
+		Path file = Paths.get(dataDirectory, fileName);
+		if (Files.exists(file)) {
+			response.setContentType("application/pdf");
+			response.addHeader("Content-Disposition", "attachment; filename=" + fileName);
+			try {
+				Files.copy(file, response.getOutputStream());
+				response.getOutputStream().flush();
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+		}
 	}
 
 }

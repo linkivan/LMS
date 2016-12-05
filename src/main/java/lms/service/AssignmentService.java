@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.commons.fileupload.FileItem;
 
+import lms.model.AssignResponseModel;
 import lms.model.AssignmentModel;
 import lms.model.FileModel;
 
@@ -18,7 +19,6 @@ public interface AssignmentService {
 
 	public List<AssignmentModel> getAssignmentByCourseId(int courseId);
 
-	public boolean submitAssignResponse(int fileId, int fileSize, FileModel file);
+	public boolean submitAssignResponse(FileItem file, AssignResponseModel assignmentResponse);
 
-	public FileModel getAssignResponse(int courseId, int fileId);
 }

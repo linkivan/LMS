@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import lms.dao.AssignmentDAO;
 import lms.dao.CourseDAO;
+import lms.model.AssignResponseModel;
 import lms.model.AssignmentModel;
 import lms.model.CourseModel;
 import lms.model.FileModel;
@@ -55,18 +56,6 @@ public class AssignmentServiceImpl implements AssignmentService {
 	}
 
 	@Override
-	public boolean submitAssignResponse(int courseId, int fileId, FileModel file) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public FileModel getAssignResponse(int courseId, int fileId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public List<AssignmentModel> getAssignmentByCourseId(int courseId) {
 		// TODO Auto-generated method stub
 		return assignmentDAO.getAssignmentByCourseId(courseId);
@@ -80,4 +69,11 @@ public class AssignmentServiceImpl implements AssignmentService {
 		}
 		return "";
 	}
+
+	@Override
+	public boolean submitAssignResponse(FileItem file, AssignResponseModel assignmentResponse) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }
