@@ -18,7 +18,7 @@ import org.springframework.stereotype.Repository;
 
 import lms.dao.AssignmentDAO;
 import lms.model.AssignmentModel;
-import lms.model.File;
+import lms.model.FileModel;
 
 @Repository
 public class AssignmentDAOImpl implements AssignmentDAO {
@@ -98,7 +98,7 @@ public class AssignmentDAOImpl implements AssignmentDAO {
 	}
 
 	@Override
-	public boolean submitAssignResponse(int fileId, int fileSize, File file) {
+	public boolean submitAssignResponse(int fileId, int fileSize, FileModel file) {
 		// TODO Auto-generated method stub
 		return false;
 	}

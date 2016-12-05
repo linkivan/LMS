@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import lms.dao.AssignmentDAO;
 import lms.model.AssignmentModel;
-import lms.model.File;
+import lms.model.FileModel;
 import lms.service.AssignmentService;
 
 
@@ -42,13 +42,13 @@ public class AssignmentServiceImpl implements AssignmentService {
 	}
 
 	@Override
-	public boolean submitAssignResponse(int courseId, int fileId, File file) {
+	public boolean submitAssignResponse(int courseId, int fileId, FileModel file) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public File getAssignResponse(int courseId, int fileId) {
+	public FileModel getAssignResponse(int courseId, int fileId) {
 		// TODO Auto-generated method stub
 		return null;
 	}

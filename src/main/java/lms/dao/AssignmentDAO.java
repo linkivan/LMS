@@ -3,7 +3,7 @@ package lms.dao;
 import java.util.List;
 
 import lms.model.AssignmentModel;
-import lms.model.File;
+import lms.model.FileModel;
 
 public interface AssignmentDAO {
 	public int addAssignment(AssignmentModel assignment);
@@ -16,5 +16,5 @@ public interface AssignmentDAO {
 	
 	public List<AssignmentModel> getAssignmentByCourseId(int courseId);
 
-	public boolean submitAssignResponse(int fileId, int fileSize, File file);
+	public boolean submitAssignResponse(int fileId, int fileSize, FileModel file);
 }

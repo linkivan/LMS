@@ -72,7 +72,7 @@
 								access="hasRole('ROLE_STU') or hasRole('ROLE_INSTR')">
 								<li><a href="<c:url value='/course/${course.id}/assignments' />">ASSIGNMENT</a></li>
 								<li><a href="#">GRADE</a></li>
-								<li><a href="#">SYLLABUS</a></li>
+								<li><a href="<c:url value='/course/${course.id}/syllabus' />">SYLLABUS</a></li>
 							</sec:authorize>
 						</ul>
 					</li>
