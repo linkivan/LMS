@@ -2,18 +2,18 @@ package lms.dao;
 
 import java.util.List;
 
-import lms.model.Course;
+import lms.model.CourseModel;
 
 public interface CourseDAO {
-	public int addCourse(Course course);
+	public int addCourse(CourseModel course);
 
-	public boolean modifyCourse(Course course);
+	public boolean modifyCourse(CourseModel course);
 
-	public Course getCourseById(int courseId);
+	public CourseModel getCourseById(int courseId);
 
-	public List<Course> getCourseByCodeAndSemester(String code, String Semester);
+	public List<CourseModel> getCourseByCodeAndSemester(String code, String Semester);
 
 	public boolean deleteCourse(int courseId);
 
-	public List<Course> getCoursesByUserId(int userId);
+	public List<CourseModel> getCoursesByUserId(int userId);
 }

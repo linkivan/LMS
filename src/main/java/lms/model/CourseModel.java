@@ -1,10 +1,9 @@
 package lms.model;
 
-public class Course {
+public class CourseModel {
 	private int id;
 	private String room;
 	private String time;
-	private String instructorId;
 	private String semester;
 	private String code;
 
@@ -66,21 +65,6 @@ public class Course {
 	 */
 	public void setTime(String time) {
 		this.time = time;
-	}
-
-	/**
-	 * @return the instructorId
-	 */
-	public String getInstructorId() {
-		return instructorId;
-	}
-
-	/**
-	 * @param instructorId
-	 *            the instructorId to set
-	 */
-	public void setInstructorId(String instructorId) {
-		this.instructorId = instructorId;
 	}
 
 	/**

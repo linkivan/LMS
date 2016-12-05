@@ -52,13 +52,13 @@
 								</select>
 							</div>
 						</div>
-						<div class="form-group">
+						<!-- <div class="form-group">
 							<label for="'instructor'" class="col-sm-2 control-label ">Instructor:</label>
 							<div class="col-sm-3">
 								<input type="text" class="form-control" id="'instructor'"
 									name='instructor' placeholder="Instructor">
 							</div>
-						</div>
+						</div> -->
 						<div class="form-group">
 							<label for="time" class="col-sm-2 control-label ">Time:</label>
 							<div class="col-sm-3">

@@ -28,7 +28,7 @@
 		<beans:property name="authoritiesByUsernameQuery" value="select username, role from user where username =?" />
 		<beans:property name="dataSource" ref="dataSource" />
 	</beans:bean>
-	<beans:bean id="UserDaoImpl" class="lms.dao.impl.UserDaoImpl" >
+	<beans:bean id="UserDaoImpl" class="lms.dao.impl.UserDAOImpl" >
 		<beans:property name="jdbcTemplate" ref="jdbcTemplate" />
 	</beans:bean>
 	<beans:bean id="authenticationProvider"

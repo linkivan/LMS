@@ -32,10 +32,10 @@
 							<th><label class="col-sm-2 control-label ">Semester:</label></th>
 							<td>${course.semester}</td>
 						</tr>
-						<tr>
+						<%-- <tr>
 							<th><label class="col-sm-2 control-label ">Instructor:</label></th>
 							<td>${course.instructorId}</td>
-						</tr>
+						</tr> --%>
 						<tr>
 							<th><label class="col-sm-2 control-label ">Time:</label></th>
 							<td>${course.time}</td>
@@ -45,11 +45,14 @@
 							<td>${course.room}</td>
 						</tr>
 					</table>
-					<div class="form-group">
-						<div class="col-sm-offset-2 col-sm-3">
-							<a href="<c:url value='/course/${course.id}/info' />" class="btn btn-danger">Modify</a>
+					<sec:authorize access="hasRole('ROLE_ADMIN')">
+						<div class="form-group">
+							<div class="col-sm-offset-2 col-sm-3">
+								<a href="<c:url value='/course/${course.id}/info' />"
+									class="btn btn-danger">Modify</a>
+							</div>
 						</div>
-					</div>
+					</sec:authorize>
 				</div>
 			</div>
 		</div>

@@ -11,6 +11,8 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl;
 
+import lms.model.UserModel;
+
 /**
  * Reference org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl
  *
@@ -29,19 +31,26 @@ public class CustomUserDetailsDAO extends JdbcDaoImpl {
 		super.setAuthoritiesByUsernameQuery(queryString);
 	}
 
+	@Override
+	public UserDetails loadUserByUsername(String username) {
+		return super.loadUserByUsername(username);
+
+	}
+
 	// override to pass get accountNonLocked
 	@Override
 	public List<UserDetails> loadUsersByUsername(String username) {
 		return getJdbcTemplate().query(super.getUsersByUsernameQuery(), new String[] { username },
 				new RowMapper<UserDetails>() {
 					@Override
-					public UserDetails mapRow(ResultSet rs, int rowNum) throws SQLException {
+					public UserModel mapRow(ResultSet rs, int rowNum) throws SQLException {
+						int id = rs.getInt("id");
 						String username = rs.getString("username");
 						String password = rs.getString("password");
 						boolean enabled = rs.getBoolean("enabled");
 						boolean accountNonLocked = rs.getBoolean("account_non_locked");
 
-						return new User(username, password, enabled, true, true, accountNonLocked,
+						return new UserModel(id, username, password, enabled, true, true, accountNonLocked,
 								AuthorityUtils.NO_AUTHORITIES);
 					}
 
@@ -58,9 +67,10 @@ public class CustomUserDetailsDAO extends JdbcDaoImpl {
 			returnUsername = username;
 		}
 
-		return new User(returnUsername, userFromUserQuery.getPassword(), userFromUserQuery.isEnabled(),
-				userFromUserQuery.isAccountNonExpired(), userFromUserQuery.isCredentialsNonExpired(),
-				userFromUserQuery.isAccountNonLocked(), combinedAuthorities);
+		return new UserModel(((UserModel) userFromUserQuery).getId(), returnUsername, userFromUserQuery.getPassword(),
+				userFromUserQuery.isEnabled(), userFromUserQuery.isAccountNonExpired(),
+				userFromUserQuery.isCredentialsNonExpired(), userFromUserQuery.isAccountNonLocked(),
+				combinedAuthorities);
 	}
 
 }

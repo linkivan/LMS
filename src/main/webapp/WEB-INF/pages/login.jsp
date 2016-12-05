@@ -33,11 +33,11 @@
                                     <div class="form-group">
                                         <input class="form-control" placeholder="Password" name="password" type="password" value="">
                                     </div>
-                                    <div class="checkbox">
+                                    <!-- <div class="checkbox">
                                         <label>
                                             <input name="remember" type="checkbox" value="Remember Me">Remember Me
                                         </label>
-                                    </div>
+                                    </div> -->
                                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                                     <!-- Change this to a button or input when using this as a form -->
                                     <input name="submit" type="submit" value="Login" class="btn btn-lg btn-success btn-block">
@@ -48,28 +48,6 @@
                 </div>
         	</div>
         </div>
-		<%-- <form name='loginForm'
-			action="<c:url value='/j_spring_security_check' />" method='POST'>
-
-			<table>
-				<tr>
-					<td>User:</td>
-					<td><input type='text' name='username'></td>
-				</tr>
-				<tr>
-					<td>Password:</td>
-					<td><input type='password' name='password' /></td>
-				</tr>
-				<tr>
-					<td colspan='2'><input name="submit" type="submit"
-						value="submit" /></td>
-				</tr>
-			</table>
-
-			<input type="hidden" name="${_csrf.parameterName}"
-				value="${_csrf.token}" />
-
-		</form> --%>
 	</div>
  <%@ include file="common/footer.jsp" %>
 </body>

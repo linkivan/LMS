@@ -1,7 +1,11 @@
 package lms.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.LockedException;
@@ -9,38 +13,20 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import lms.model.UIUserModel;
+import lms.model.UserModel;
+import lms.service.UserService;
+
 @Controller
 public class UserController {
-
-	// @RequestMapping(value = { "/", "/welcome**" }, method =
-	// RequestMethod.GET)
-	// public ModelAndView defaultPage() {
-	//
-	// ModelAndView model = new ModelAndView();
-	// model.addObject("title", "Spring Security Login Form - Database
-	// Authentication");
-	// model.addObject("message", "This is default page!");
-	// model.setViewName("hello");
-	// return model;
-	//
-	// }
-
-	@RequestMapping(value = "/admin**", method = RequestMethod.GET)
-	public ModelAndView adminPage() {
-
-		ModelAndView model = new ModelAndView();
-		model.addObject("title", "Spring Security Login Form - Database Authentication");
-		model.addObject("message", "This page is for ROLE_ADMIN only!");
-		model.setViewName("admin");
-
-		return model;
-
-	}
+	@Autowired
+	private UserService userService;
 
 	@RequestMapping(value = { "/", "/login" }, method = RequestMethod.GET)
 	public ModelAndView login(@RequestParam(value = "error", required = false) String error,
@@ -98,4 +84,43 @@ public class UserController {
 
 	}
 
+	@RequestMapping(value = "/course/{id}/people", method = RequestMethod.GET)
+	public ModelAndView coursePeoplePage(@PathVariable("id") int id) {
+		ModelAndView model = new ModelAndView();
+		List<UIUserModel> instructors = userService.getInstructorsOfCourse(id);
+		List<UIUserModel> students = userService.getStudentsOfCourse(id);
+		model.addObject("instructors", instructors);
+		model.addObject("students", students);
+		model.setViewName("coursePeople");
+		return model;
+	}
+
+	@Secured("ROLE_ADMIN")
+	@RequestMapping(value = "/course/{id}/people/new", method = RequestMethod.GET)
+	public ModelAndView courseAddPeoplePage(@PathVariable("id") int id, String username) {
+		ModelAndView model = new ModelAndView();
+		model.addObject("id", id);
+
+		UIUserModel user = userService.getUserByUsername(username);
+		if (user != null && userService.isUserinCourse(user.getId(), id)) {
+			model.addObject("msg", username + " is already in this course!");
+		}
+		model.addObject("user", user);
+		model.setViewName("courseAddPeople");
+		return model;
+	}
+
+	@Secured("ROLE_ADMIN")
+	@RequestMapping(value = "/course/{id}/people", method = RequestMethod.POST)
+	public String courseAddPeoplePage(@PathVariable("id") int id, int userId) {
+		userService.addUserToCourse(userId, id);
+		return "redirect:/course/" + id + "/people";
+	}
+
+	@Secured("ROLE_ADMIN")
+	@RequestMapping(value = "/course/{id}/people/{userid}", method = RequestMethod.DELETE)
+	public String courseDeletePeople(@PathVariable("id") int id, @PathVariable("userid") int userId) {
+		userService.deleteUserOfCourse(userId, id);
+		return "redirect:/course/" + id + "/people";
+	}
 }
