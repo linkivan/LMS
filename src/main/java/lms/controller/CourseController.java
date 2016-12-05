@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import lms.model.CourseModel;
+import lms.model.UIMenu;
 import lms.model.UserModel;
 import lms.service.CourseService;
 
@@ -30,6 +31,7 @@ public class CourseController {
 		} else {
 			courses = courseService.getCoursesByUserId(((UserModel) authentication.getPrincipal()).getId());
 		}
+		model.addObject("uiMenu", new UIMenu("", 0, false));
 		model.addObject("courses", courses);
 		model.setViewName("courses");
 		return model;
@@ -39,6 +41,7 @@ public class CourseController {
 	@RequestMapping(value = "/courses/new", method = RequestMethod.GET)
 	public ModelAndView coursesForm() {
 		ModelAndView model = new ModelAndView();
+		model.addObject("uiMenu", new UIMenu("", 0, false));
 		model.setViewName("coursesForm");
 		return model;
 	}
@@ -55,6 +58,7 @@ public class CourseController {
 	public ModelAndView coursePage(@PathVariable("id") int id) {
 		ModelAndView model = new ModelAndView();
 		CourseModel course = courseService.getCourseById(id);
+		model.addObject("uiMenu", new UIMenu(course.getCode(), 1, true));
 		model.addObject("course", course);
 		model.setViewName("courseInfo");
 		return model;
@@ -74,6 +78,7 @@ public class CourseController {
 	public ModelAndView courseModifyForm(@PathVariable("id") int id) {
 		ModelAndView model = new ModelAndView();
 		CourseModel course = courseService.getCourseById(id);
+		model.addObject("uiMenu", new UIMenu(course.getCode(), 1, true));
 		model.addObject("course", course);
 		model.setViewName("courseInfoForm");
 		return model;

@@ -17,7 +17,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import lms.dao.AssignmentDAO;
-import lms.model.Assignment;
+import lms.model.AssignmentModel;
 import lms.model.File;
 
 @Repository
@@ -26,9 +26,9 @@ public class AssignmentDAOImpl implements AssignmentDAO {
 	private JdbcTemplate jdbcTemplate;
 
 	@Override
-	public int addAssignment(final Assignment assignment) {
-		final String sql = "INSERT INTO assignment (name, course_id, dueDate, status, totalScore)"
-				+ " VALUES (?, ?, ?, ?, ?)";
+	public int addAssignment(final AssignmentModel assignment) {
+		final String sql = "INSERT INTO assignment (name, course_id, dueDate, status,  totalScore, weight, submit_by, description)"
+				+ " VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		jdbcTemplate.update(new PreparedStatementCreator() {
 
@@ -40,6 +40,9 @@ public class AssignmentDAOImpl implements AssignmentDAO {
 				ps.setString(3, assignment.getDueDate());
 				ps.setString(4, assignment.getStatus());
 				ps.setString(5, assignment.getTotalScore());
+				ps.setString(6, assignment.getWeight());
+				ps.setString(7, assignment.getSubmitBy());
+				ps.setString(8, assignment.getDescription());
 				return ps;
 			}
 
@@ -49,12 +52,12 @@ public class AssignmentDAOImpl implements AssignmentDAO {
 	}
 
 	@Override
-	public boolean modifyAssignment(Assignment assignment) {
-		String sql = "UPDATE assignment SET name = ?, dueDate = ?, status = ?, totalScore = ?, weight = ?, courese_id = ?, file_id = ?"
+	public boolean modifyAssignment(AssignmentModel assignment) {
+		String sql = "UPDATE assignment SET name = ?, dueDate = ?, status = ?, totalScore = ?, weight = ?, course_id = ?, submit_by =?, description=?"
 				+ "WHERE id = ?";
 		jdbcTemplate.update(sql, assignment.getName(), assignment.getDueDate(), assignment.getStatus(),
-				assignment.getTotalScore(), assignment.getWeight(), assignment.getCourseId(), assignment.getFileId(),
-				assignment.getId());
+				assignment.getTotalScore(), assignment.getWeight(), assignment.getCourseId(), assignment.getSubmitBy(),
+				assignment.getDescription(), assignment.getId());
 		return true;
 	}
 
@@ -66,15 +69,15 @@ public class AssignmentDAOImpl implements AssignmentDAO {
 	}
 
 	@Override
-	public Assignment getAssignmentById(int assignmentId) {
+	public AssignmentModel getAssignmentById(int assignmentId) {
 		String sql = "SELECT * FROM assignment WHERE id = ?";
 
-		Assignment assignment = jdbcTemplate.queryForObject(sql, new Object[] { assignmentId },
-				new RowMapper<Assignment>() {
+		AssignmentModel assignment = jdbcTemplate.queryForObject(sql, new Object[] { assignmentId },
+				new RowMapper<AssignmentModel>() {
 
 					@Override
-					public Assignment mapRow(ResultSet rs, int rowNum) throws SQLException {
-						Assignment assignment = new Assignment();
+					public AssignmentModel mapRow(ResultSet rs, int rowNum) throws SQLException {
+						AssignmentModel assignment = new AssignmentModel();
 
 						assignment.setId(rs.getInt("id"));
 						assignment.setName(rs.getString("name"));
@@ -84,7 +87,8 @@ public class AssignmentDAOImpl implements AssignmentDAO {
 						assignment.setWeight(rs.getString("weight"));
 						assignment.setCourseId(rs.getInt("course_id"));
 						assignment.setFileId(rs.getInt("file_id"));
-
+						assignment.setDescription(rs.getString("description"));
+						assignment.setSubmitBy(rs.getString("submit_by"));
 						return assignment;
 					}
 
@@ -100,28 +104,29 @@ public class AssignmentDAOImpl implements AssignmentDAO {
 	}
 
 	@Override
-	public List<Assignment> getAssignmentByCourseId(int courseId) {
+	public List<AssignmentModel> getAssignmentByCourseId(int courseId) {
 		String sql = "SELECT * FROM assignment WHERE course_id = ?";
 
-		List<Assignment> assignments = jdbcTemplate.query(sql, new Object[] { courseId }, new RowMapper<Assignment>() {
+		List<AssignmentModel> assignments = jdbcTemplate.query(sql, new Object[] { courseId },
+				new RowMapper<AssignmentModel>() {
 
-			@Override
-			public Assignment mapRow(ResultSet rs, int rowNum) throws SQLException {
-				Assignment assignment = new Assignment();
-				
-				assignment.setId(rs.getInt("id"));
-				assignment.setName(rs.getString("name"));
-				assignment.setDueDate(rs.getString("dueDate"));
-				assignment.setStatus(rs.getString("status"));
-				assignment.setTotalScore(rs.getString("totalScore"));
-				assignment.setWeight(rs.getString("weight"));
-				assignment.setCourseId(rs.getInt("course_id"));
-				assignment.setFileId(rs.getInt("file_id"));
-				
-				return assignment;
-			}
-			
-		});
+					@Override
+					public AssignmentModel mapRow(ResultSet rs, int rowNum) throws SQLException {
+						AssignmentModel assignment = new AssignmentModel();
+
+						assignment.setId(rs.getInt("id"));
+						assignment.setName(rs.getString("name"));
+						assignment.setDueDate(rs.getString("dueDate"));
+						assignment.setStatus(rs.getString("status"));
+						assignment.setTotalScore(rs.getString("totalScore"));
+						assignment.setWeight(rs.getString("weight"));
+						assignment.setCourseId(rs.getInt("course_id"));
+						assignment.setFileId(rs.getInt("file_id"));
+
+						return assignment;
+					}
+
+				});
 		return assignments;
 	}
 }

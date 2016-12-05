@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import lms.dao.AssignmentDAO;
-import lms.model.Assignment;
+import lms.model.AssignmentModel;
 import lms.model.File;
 import lms.service.AssignmentService;
 
@@ -18,13 +18,13 @@ public class AssignmentServiceImpl implements AssignmentService {
 	private AssignmentDAO assignmentDAO;
 
 	@Override
-	public int addAssignment(Assignment assignment) {
+	public int addAssignment(AssignmentModel assignment) {
 		
 		return assignmentDAO.addAssignment(assignment);
 	}
 
 	@Override
-	public boolean modifyAssignment(Assignment assignment) {
+	public boolean modifyAssignment(AssignmentModel assignment) {
 		
 		return assignmentDAO.modifyAssignment(assignment);
 	}
@@ -36,7 +36,7 @@ public class AssignmentServiceImpl implements AssignmentService {
 	}
 
 	@Override
-	public Assignment getAssignmentById(int assignmentId) {
+	public AssignmentModel getAssignmentById(int assignmentId) {
 		
 		return assignmentDAO.getAssignmentById(assignmentId);
 	}
@@ -54,7 +54,7 @@ public class AssignmentServiceImpl implements AssignmentService {
 	}
 
 	@Override
-	public List<Assignment> getAssignmentByCourseId(int courseId) {
+	public List<AssignmentModel> getAssignmentByCourseId(int courseId) {
 		// TODO Auto-generated method stub
 		return assignmentDAO.getAssignmentByCourseId(courseId);
 	}

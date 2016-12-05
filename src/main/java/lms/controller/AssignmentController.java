@@ -3,6 +3,7 @@ package lms.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,66 +11,80 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
-import lms.model.Assignment;
+import lms.model.AssignmentModel;
+import lms.model.CourseModel;
+import lms.model.UIMenu;
 import lms.service.AssignmentService;
+import lms.service.CourseService;
 
 @Controller
+@RequestMapping(value = "/course/{courseId}")
 public class AssignmentController {
 	@Autowired
 	private AssignmentService assignmentService;
+	@Autowired
+	private CourseService courseService;
 
 	@RequestMapping(value = "/assignments", method = RequestMethod.GET)
-	public ModelAndView assignmentsPage(int courseId) {
+	public ModelAndView assignmentsPage(@PathVariable("courseId") int courseId) {
 		ModelAndView model = new ModelAndView();
-		List<Assignment> assignments = assignmentService.getAssignmentByCourseId(courseId);
+		List<AssignmentModel> assignments = assignmentService.getAssignmentByCourseId(courseId);
+		CourseModel course = courseService.getCourseById(courseId);
+		model.addObject("uiMenu", new UIMenu(course.getCode(), 2, true));
+		model.addObject("course", course);
 		model.addObject("assignments", assignments);
 		model.setViewName("assignments");
 		return model;
 	}
 
+	@Secured("ROLE_INSTR")
 	@RequestMapping(value = "/assignments/new", method = RequestMethod.GET)
-	public ModelAndView assignmentForm() {
+	public ModelAndView assignmentForm(@PathVariable("courseId") int courseId) {
+
 		ModelAndView model = new ModelAndView();
+		CourseModel course = courseService.getCourseById(courseId);
+		model.addObject("uiMenu", new UIMenu(course.getCode(), 2, true));
+		model.addObject("course", course);
 		model.setViewName("assignmentForm");
 		return model;
 	}
 
+	@Secured("ROLE_INSTR")
 	@RequestMapping(value = "/assignments", method = RequestMethod.POST)
-	public String addAssignment(Assignment assignment) {
+	public String addAssignment(@PathVariable("courseId") int courseId, AssignmentModel assignment) {
+		assignment.setCourseId(courseId);
 		int id = assignmentService.addAssignment(assignment);
-		return "redirect:/assignment/" + id;
+		return "redirect:/course/" + courseId + "/assignment/" + id;
 	}
 
 	@RequestMapping(value = "/assignment/{id}", method = RequestMethod.GET)
-	public ModelAndView assignmentPage(@PathVariable("id") int id) {
+	public ModelAndView assignmentPage(@PathVariable("courseId") int courseId, @PathVariable("id") int id) {
 		ModelAndView model = new ModelAndView();
-		Assignment assignment = assignmentService.getAssignmentById(id);
+		AssignmentModel assignment = assignmentService.getAssignmentById(id);
+		CourseModel course = courseService.getCourseById(courseId);
+		model.addObject("uiMenu", new UIMenu(course.getCode(), 2, true));
+		model.addObject("course", course);
 		model.addObject("id", id);
 		model.addObject("assignment", assignment);
 		model.setViewName("assignment");
 		return model;
 	}
 
+	@Secured("ROLE_INSTR")
 	@RequestMapping(value = "/assignment/{id}", method = RequestMethod.DELETE)
-	public String deleteAssignment(@PathVariable("id") int id) {
+	public String deleteAssignment(@PathVariable("courseId") int courseId, @PathVariable("id") int id) {
 		assignmentService.deleteAssignment(id);
-		return "redirect:/assignments/";
+		return "redirect:/course/" + courseId + "/assignments/";
 	}
 
-	@RequestMapping(value = "/assignment/{id}/info", method = RequestMethod.GET)
-	public ModelAndView assignmentModifyForm(@PathVariable("id") int id) {
-		ModelAndView model = new ModelAndView();
-		Assignment assignment = assignmentService.getAssignmentById(id);
-		model.addObject("assignment", assignment);
-		model.setViewName("assignmentInfoForm");
-		return model;
-	}
-
+	@Secured("ROLE_INSTR")
 	@RequestMapping(value = "/assignment/{id}", method = RequestMethod.PUT)
-	public String modifyAssignment(@PathVariable("id") int id, Assignment assignment) {
+	public String modifyAssignment(@PathVariable("courseId") int courseId, @PathVariable("id") int id,
+			AssignmentModel assignment) {
 		assignment.setId(id);
+		assignment.setCourseId(courseId);
 		assignmentService.modifyAssignment(assignment);
-		return "return:/assignment/" + id;
+		return "redirect:/course/" + courseId + "/assignment/" + id;
 	}
-	
+
 }

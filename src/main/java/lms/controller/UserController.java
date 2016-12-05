@@ -19,14 +19,19 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import lms.model.CourseModel;
+import lms.model.UIMenu;
 import lms.model.UIUserModel;
 import lms.model.UserModel;
+import lms.service.CourseService;
 import lms.service.UserService;
 
 @Controller
 public class UserController {
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private CourseService courseService;
 
 	@RequestMapping(value = { "/", "/login" }, method = RequestMethod.GET)
 	public ModelAndView login(@RequestParam(value = "error", required = false) String error,
@@ -89,6 +94,9 @@ public class UserController {
 		ModelAndView model = new ModelAndView();
 		List<UIUserModel> instructors = userService.getInstructorsOfCourse(id);
 		List<UIUserModel> students = userService.getStudentsOfCourse(id);
+		CourseModel course = courseService.getCourseById(id);
+		model.addObject("uiMenu", new UIMenu(course.getCode(), 2, true));
+		model.addObject("course", course);
 		model.addObject("instructors", instructors);
 		model.addObject("students", students);
 		model.setViewName("coursePeople");
@@ -105,6 +113,9 @@ public class UserController {
 		if (user != null && userService.isUserinCourse(user.getId(), id)) {
 			model.addObject("msg", username + " is already in this course!");
 		}
+		CourseModel course = courseService.getCourseById(id);
+		model.addObject("uiMenu", new UIMenu(course.getCode(), 2, true));
+		model.addObject("course", course);
 		model.addObject("user", user);
 		model.setViewName("courseAddPeople");
 		return model;

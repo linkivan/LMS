@@ -2,19 +2,19 @@ package lms.service;
 
 import java.util.List;
 
-import lms.model.Assignment;
+import lms.model.AssignmentModel;
 import lms.model.File;
 
 public interface AssignmentService {
-	public int addAssignment(Assignment assignment);
+	public int addAssignment(AssignmentModel assignment);
 	
-	public boolean modifyAssignment(Assignment assignment);
+	public boolean modifyAssignment(AssignmentModel assignment);
 	
 	public boolean deleteAssignment(int assignmentId);
 	
-	public Assignment getAssignmentById(int assignmentId);
+	public AssignmentModel getAssignmentById(int assignmentId);
 	
-	public List<Assignment> getAssignmentByCourseId(int courseId);
+	public List<AssignmentModel> getAssignmentByCourseId(int courseId);
 	
 	public boolean submitAssignResponse(int fileId, int fileSize, File file);
 	
