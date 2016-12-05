@@ -12,4 +12,6 @@ public interface FileService {
 	String createAssignmentFile(FileItem responeFile, CourseModel course, String assignmentName, String username);
 
 	String getPathByFileId(int fileId);
+
+	String getSyllabusPathByCourseId(int courseId);
 }

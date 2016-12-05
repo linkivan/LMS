@@ -40,4 +40,10 @@ public class FileServiceImpl implements FileService {
 		return null;
 	}
 
+	@Override
+	public String getSyllabusPathByCourseId(int CourseId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
