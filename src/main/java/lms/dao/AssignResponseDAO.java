@@ -5,15 +5,14 @@ import java.util.List;
 import lms.model.AssignResponseModel;
 
 public interface AssignResponseDAO {
-	public boolean addAssignResponse(AssignResponseModel assignRes, int fileId);
+	public boolean addAssignResponse(AssignResponseModel assignRes);
 	
-	public boolean updateAssignResponseById(int assignResId);
+	public boolean modifyAssignResponse(AssignResponseModel assignRes);
 	
-	public boolean deleteAssignResponseById(int assignResId);
+	public boolean deleteAssignResponse(int assignResId);
 	
 	public AssignResponseModel getByUserIdAndAssignId(int userId, int assignId);
 	
-	public List<AssignResponseModel> getByUserId(int userId);
+	public List<AssignResponseModel> getByUserIdAndCourseId(int userId, int courseId);
 	
-	public List<AssignResponseModel> getByCourseId(int courseId);
 }
