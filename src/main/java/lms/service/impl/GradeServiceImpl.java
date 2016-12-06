@@ -10,14 +10,13 @@ import lms.model.AssignResponseModel;
 import lms.service.GradeService;
 
 @Service
-public class GradeServiceImpl implements GradeService{
-	@Autowired 
+public class GradeServiceImpl implements GradeService {
+	@Autowired
 	private GradeDAO gradeDAO;
 
 	@Override
 	public boolean gradeAssignResponse(AssignResponseModel assignRes) {
-		// TODO Auto-generated method stub
-		return false;
+		return gradeDAO.gradeAssignResponse(assignRes);
 	}
 
 	@Override
@@ -28,7 +27,7 @@ public class GradeServiceImpl implements GradeService{
 
 	@Override
 	public List<AssignResponseModel> getResponsesByUserIdAndCourseId(int userId, int courseId) {
-		
+
 		return gradeDAO.getResponsesByUserIdAndCourseId(userId, courseId);
 	}
 

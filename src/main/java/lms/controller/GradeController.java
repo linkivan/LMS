@@ -73,7 +73,7 @@ public class GradeController {
 	}
 
 	@RequestMapping(value = "/grades/{userId}", method = RequestMethod.GET)
-	public ModelAndView assignGradesPage(@PathVariable("courseId") int courseId, @PathVariable("userId") int userId){
+	public ModelAndView assignGradesPage(@PathVariable("courseId") int courseId, @PathVariable("userId") int userId) {
 		ModelAndView model = new ModelAndView();
 		List<AssignResponseModel> assignReses = gradeService.getResponsesByUserIdAndCourseId(userId, courseId);
 		model.addObject("assignReses", assignReses);
@@ -81,4 +81,19 @@ public class GradeController {
 		return model;
 	}
 
+	@RequestMapping(value = "/assignment/{assignmentId}/student/{studentid}", method = RequestMethod.GET)
+	public ModelAndView assignGradesPage1(@PathVariable("courseId") int courseId,
+			@PathVariable("assignmentId") int assignmentId, @PathVariable("studentid") int studentid) {
+
+		ModelAndView model = new ModelAndView();
+		CourseModel course = courseService.getCourseById(courseId);
+		AssignResponseModel response = gradeService.getByUserIdAndAssignId(studentid, assignmentId);
+		FileModel file = fileService.getPathByFileId(response.getFileId());
+		model.addObject("uiMenu", new UIMenu(course.getCode(), 3, true));
+		model.addObject("assignmentId", assignmentId);
+		model.addObject("studentid", studentid);
+		model.addObject("file", file);
+		model.setViewName("assignmentGrade");
+		return model;
+	}
 }
