@@ -24,6 +24,7 @@ public class FileServiceImpl implements FileService {
 	@Override
 	public int createSyllabus(FileItem syllabus, CourseModel course, String uploaderName) throws IOException {
 		int fileId = 0;
+		int syllabusId = 0;
 		
 		// build the destination folder
 		String UPLOAD_DIRECTORY = servletContext.getInitParameter("file-upload");
@@ -32,12 +33,13 @@ public class FileServiceImpl implements FileService {
 						    course.getSemester() 	+ "/syllabus";
 		
 		uploadPath = servletContext.getRealPath("/") + uploadPath;
-		
-		// creates the directory if it does not exist
 		fileId = persistUploadedFile(syllabus, uploadPath, uploaderName);
-        fileDAO.addSyllabusInfo(fileId, course.getId());
+        syllabusId = fileDAO.addSyllabusInfo(fileId, course.getId());
 		
-		return fileId;
+        System.out.println("Inserted syllabus info to syllabus table...");
+        System.out.println("syllabus ID : " + syllabusId);
+		
+        return fileId;
 	}
 	
 	@Override
@@ -53,8 +55,6 @@ public class FileServiceImpl implements FileService {
 						    assignmentName;
 		
 		uploadPath = servletContext.getRealPath("/") + uploadPath;
-		
-		// creates the directory if it does not exist
 		fileId = persistUploadedFile(assignmentFile, uploadPath, uploaderName);
         
 		return fileId;
@@ -73,8 +73,6 @@ public class FileServiceImpl implements FileService {
 						    uploaderName;
 		
 		uploadPath = servletContext.getRealPath("/") + uploadPath;
-		
-		// creates the directory if it does not exist
 		fileId = persistUploadedFile(responseFile, uploadPath, uploaderName);
         
 		return fileId;
@@ -95,7 +93,8 @@ public class FileServiceImpl implements FileService {
 		String filePath = "";
 		int    fileId = 0;
 		File   uploadDir = new File(uploadPath);
-        
+		
+		// creates the directory if it does not exist
 		if (!uploadDir.exists()) {
             System.out.println("directory doesn't exist...creating...");
             uploadDir.mkdirs();
@@ -103,15 +102,20 @@ public class FileServiceImpl implements FileService {
         
         filePath = uploadPath + "/" + uploadedFile.getName();
         File storeFile = new File(filePath);
-        System.out.println("Writing to : " + storeFile.getAbsolutePath());
+        
+        System.out.println("Saving...");
+        System.out.println("File           : " + storeFile.getName());
+        System.out.println("Path           : " + storeFile.getPath());
+        System.out.println("Canonical path : " + storeFile.getCanonicalPath());
+        System.out.println("Absolute path  : " + storeFile.getAbsolutePath());
+        
         // saves the file on disk and writes the file information to file table in the database.
         try {
 			uploadedFile.write(storeFile);
-			fileId = fileDAO.createFile(new FileModel(uploaderName, uploadPath, uploadedFile.getName()));
+			fileId = fileDAO.addFileInfo(new FileModel(uploaderName, uploadPath, uploadedFile.getName()));
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-			throw new IOException("Exception while trying to write file to disk..." + e.getMessage());
+			throw new IOException("Exception while trying to save file to disk..." + e.getMessage());
 		}
         
 		return fileId;
