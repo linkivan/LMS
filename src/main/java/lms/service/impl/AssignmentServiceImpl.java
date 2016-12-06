@@ -10,6 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import lms.dao.AssignResponseDAO;
 import lms.dao.AssignmentDAO;
 import lms.dao.CourseDAO;
 import lms.model.AssignResponseModel;
@@ -28,6 +29,8 @@ public class AssignmentServiceImpl implements AssignmentService {
 	private CourseDAO courseDAO;
 	@Autowired
 	private FileService fileService;
+	@Autowired
+	private AssignResponseDAO assignResponseDAO;
 
 	@Override
 	public int addAssignment(AssignmentModel assignment, FileItem assignmentFile) {
@@ -78,9 +81,9 @@ public class AssignmentServiceImpl implements AssignmentService {
 	}
 
 	@Override
-	public boolean submitAssignResponse(FileItem file, AssignResponseModel assignmentResponse) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean submitAssignResponse(AssignResponseModel assignmentResponse) {
+		
+		return assignResponseDAO.addAssignResponse(assignmentResponse);
 	}
 
 }

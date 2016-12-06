@@ -8,7 +8,7 @@
     <!-- enable use-expressions -->
 	<http auto-config="true" use-expressions="true">
 		<intercept-url pattern="/courses**" access="isAuthenticated()" />
-		
+		<intercept-url pattern="/course**" access="isAuthenticated()" />
 		<!-- access denied page -->
 		<access-denied-handler error-page="/403" />
 		<form-login 
