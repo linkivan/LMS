@@ -72,4 +72,13 @@ public class GradeController {
 		return model;
 	}
 
+	@RequestMapping(value = "/grades/{userId}", method = RequestMethod.GET)
+	public ModelAndView assignGradesPage(@PathVariable("courseId") int courseId, @PathVariable("userId") int userId){
+		ModelAndView model = new ModelAndView();
+		List<AssignResponseModel> assignReses = gradeService.getResponsesByUserIdAndCourseId(userId, courseId);
+		model.addObject("assignReses", assignReses);
+		model.setViewName("assignReses");
+		return model;
+	}
+
 }
