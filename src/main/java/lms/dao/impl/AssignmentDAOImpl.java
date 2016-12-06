@@ -105,7 +105,7 @@ public class AssignmentDAOImpl implements AssignmentDAO {
 
 	@Override
 	public List<AssignmentModel> getAssignmentByCourseId(int courseId) {
-		String sql = "SELECT * FROM assignment WHERE course_id = ?";
+		String sql = "SELECT * FROM assignment WHERE course_id = ? ORDER BY id ASC";
 
 		List<AssignmentModel> assignments = jdbcTemplate.query(sql, new Object[] { courseId },
 				new RowMapper<AssignmentModel>() {

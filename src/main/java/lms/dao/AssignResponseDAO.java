@@ -9,9 +9,9 @@ public interface AssignResponseDAO {
 	
 	public boolean modifyAssignResponse(AssignResponseModel assignRes);
 	
-	public boolean deleteAssignResponse(int assignResId);
+	public boolean deleteAssignResponse(int userId, int assignmentId);
 	
-	public AssignResponseModel getByUserIdAndAssignId(int userId, int assignId);
+	public AssignResponseModel getByUserIdAndAssignId(int userId, int assignmentId);
 	
 	public List<AssignResponseModel> getByUserIdAndCourseId(int userId, int courseId);
 	

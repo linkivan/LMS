@@ -2,6 +2,7 @@ package lms.controller;
 
 import java.util.List;
 
+import org.apache.commons.fileupload.FileItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
@@ -14,13 +15,16 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import lms.model.AssignResponseModel;
 import lms.model.AssignmentModel;
 import lms.model.CourseModel;
 import lms.model.FileModel;
 import lms.model.UIMenu;
+import lms.model.UserModel;
 import lms.service.AssignmentService;
 import lms.service.CourseService;
 import lms.service.FileService;
+import lms.service.GradeService;
 
 @Controller
 @RequestMapping(value = "/course/{courseId}")
@@ -31,6 +35,8 @@ public class AssignmentController {
 	private CourseService courseService;
 	@Autowired
 	private FileService fileService;
+	@Autowired
+	private GradeService gradeService;
 
 	@RequestMapping(value = "/assignments", method = RequestMethod.GET)
 	public ModelAndView assignmentsPage(@PathVariable("courseId") int courseId) {
@@ -96,5 +102,34 @@ public class AssignmentController {
 		assignmentService.modifyAssignment(assignment);
 		return "redirect:/course/" + courseId + "/assignment/" + id;
 	}
+	/*
+	@Secured("ROLE_STU")
+	@RequestMapping(value = "/assignment/{id}", method = RequestMethod.GET)
+	public String submitResponsePage(@PathVariable("id") int assignmentId, Authentication authentication){
+		ModelAndView model = new ModelAndView();
+		
+		return null;
+	}
+	
+	
+	/*
+	@Secured("ROLE_STU")
+	@RequestMapping(value = "/assignment/{id}", method = RequestMethod.POST)
+	public String submitAssignResponse(@PathVariable("id") int assignmentId,
+			@RequestParam CommonsMultipartFile fileUpload, Authentication authentication) {
+
+		AssignmentModel assignment = assignmentService.getAssignmentById(assignmentId);
+		AssignResponseModel assignRes = new AssignResponseModel();
+		CourseModel course = courseService.getCourseById(assignment.getCourseId());
+		FileItem response = fileUpload.getFileItem();
+		int assignResFileId = fileService.createAssignmentResponse(response, course, assignment.getName(),
+				authentication.getName());
+		int userId = ((UserModel) authentication.getPrincipal()).getId();
+		assignRes.setFileId(assignResFileId);
+		assignRes.setUserId(userId);
+		assignmentService.submitAssignResponse(assignRes);
+
+		return "redirect:/course/" + course.getId() + "/assignment/" + assignmentId;
+	}*/
 
 }
