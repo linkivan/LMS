@@ -35,7 +35,11 @@
 			/WEB-INF/spring-database.xml
 		</param-value>
 	</context-param>
-
+	<context-param>
+		<description>Location to store uploaded files</description>
+		<param-name>file-upload</param-name>
+		<param-value>course_upload_files</param-value>
+	</context-param>
 	<!-- Spring Security -->
 	<filter>
 		<filter-name>springSecurityFilterChain</filter-name>
