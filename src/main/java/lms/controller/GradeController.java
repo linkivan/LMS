@@ -22,45 +22,54 @@ import lms.model.AssignResponseModel;
 import lms.model.AssignmentModel;
 import lms.model.CourseModel;
 import lms.model.FileModel;
-//import lms.model.UIGradeBookModel;
+import lms.model.UIGradeBookModel;
 import lms.model.UIMenu;
 import lms.model.UIUserModel;
 import lms.service.AssignmentService;
 import lms.service.CourseService;
 import lms.service.FileService;
+import lms.service.GradeService;
 import lms.service.UserService;
 
 @Controller
 @RequestMapping(value = "/course/{courseId}")
 public class GradeController {
 	@Autowired
-	private AssignmentService assignmentService;
+	private GradeService gradeService;
 	@Autowired
 	private CourseService courseService;
 	@Autowired
 	private FileService fileService;
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private AssignmentService assignmentService;
 
-	// @RequestMapping(value = "/grades", method = RequestMethod.GET)
-	// public ModelAndView gradesPage(@PathVariable("courseId") int courseId) {
-	// // ModelAndView model = new ModelAndView();
-	// // List<UIGradeBookModel> grades = new ArrayList<UIGradeBookModel>();
-	// // List<UIUserModel> students =
-	// // userService.getStudentsOfCourse(courseId);
-	// // for (UIUserModel student : students) {
-	// // UIGradeBookModel gradeBook = new UIGradeBookModel();
-	// // gradeBook.setStudent(student);
-	// // Map<String, AssignResponseModel> gradeLine = new HashMap<String,
-	// // AssignResponseModel>();
-	// // List<AssignResponseModel> responses =
-	// // assignmentService.getResponsesByUserIdAndCourseId(student.getId(),
-	// // courseId);
-	// // for (AssignResponseModel response : responses) {
-	// // gradeLine.put(response.getAssignmentId(), response);
-	// // }
-	// // }
-	// // return model;
-	// }
+	@RequestMapping(value = "/grades", method = RequestMethod.GET)
+	public ModelAndView gradesPage(@PathVariable("courseId") int courseId) {
+		ModelAndView model = new ModelAndView();
+		List<AssignmentModel> assignments = assignmentService.getAssignmentByCourseId(courseId);
+		List<UIGradeBookModel> grades = new ArrayList<UIGradeBookModel>();
+		List<UIUserModel> students = userService.getStudentsOfCourse(courseId);
+		for (UIUserModel student : students) {
+			UIGradeBookModel gradeBook = new UIGradeBookModel();
+			gradeBook.setStudent(student);
+			Map<Integer, AssignResponseModel> gradeLine = new HashMap<Integer, AssignResponseModel>();
+			List<AssignResponseModel> responses = gradeService.getResponsesByUserIdAndCourseId(student.getId(),
+					courseId);
+			for (AssignResponseModel response : responses) {
+				gradeLine.put(response.getAssignmentId(), response);
+			}
+			gradeBook.setGrades(gradeLine);
+			grades.add(gradeBook);
+		}
+		CourseModel course = courseService.getCourseById(courseId);
+		model.addObject("uiMenu", new UIMenu(course.getCode(), 3, true));
+		model.addObject("course", course);
+		model.addObject("grades", grades);
+		model.addObject("assignments", assignments);
+		model.setViewName("grades");
+		return model;
+	}
 
 }
