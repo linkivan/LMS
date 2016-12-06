@@ -105,7 +105,7 @@ public class GradeController {
 		ModelAndView model = new ModelAndView();
 		CourseModel course = courseService.getCourseById(courseId);
 		AssignResponseModel response = gradeService.getByUserIdAndAssignId(studentid, assignmentId);
-		FileModel file = fileService.getPathByFileId(response.getFileId());
+		FileModel file = fileService.getFileByFileId(response.getFileId());
 		AssignmentModel assignment = assignmentService.getAssignmentById(assignmentId);
 		model.addObject("uiMenu", new UIMenu(course.getCode(), 3, true));
 		model.addObject("course", course);
