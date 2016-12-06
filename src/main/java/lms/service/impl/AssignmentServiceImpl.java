@@ -1,5 +1,6 @@
 package lms.service.impl;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.apache.commons.fileupload.FileItem;
@@ -31,8 +32,14 @@ public class AssignmentServiceImpl implements AssignmentService {
 	@Override
 	public int addAssignment(AssignmentModel assignment, FileItem assignmentFile) {
 		CourseModel course = courseDAO.getCourseById(assignment.getCourseId());
-		int fileId = fileService.createAssignmentFile(assignmentFile, course, assignment.getName(),
-				this.currentUserName());
+		int fileId = 0;
+		try {
+			fileId = fileService.createAssignmentFile(assignmentFile, course, assignment.getName(),
+					this.currentUserName());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		assignment.setFileId(fileId);
 		return assignmentDAO.addAssignment(assignment);
 	}

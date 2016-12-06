@@ -69,7 +69,7 @@ public class AssignmentController {
 	public ModelAndView assignmentPage(@PathVariable("courseId") int courseId, @PathVariable("id") int id) {
 		ModelAndView model = new ModelAndView();
 		AssignmentModel assignment = assignmentService.getAssignmentById(id);
-		FileModel fileModel = fileService.getPathByFileId(assignment.getFileId());
+		FileModel fileModel = fileService.getFileByFileId(assignment.getFileId());
 		CourseModel course = courseService.getCourseById(courseId);
 		model.addObject("uiMenu", new UIMenu(course.getCode(), 2, true));
 		model.addObject("course", course);
