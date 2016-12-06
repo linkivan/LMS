@@ -28,6 +28,7 @@ import lms.model.UIUserModel;
 import lms.service.AssignmentService;
 import lms.service.CourseService;
 import lms.service.FileService;
+import lms.service.GradeService;
 import lms.service.UserService;
 
 @Controller
@@ -41,6 +42,8 @@ public class GradeController {
 	private FileService fileService;
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private GradeService gradeService;
 
 	// @RequestMapping(value = "/grades", method = RequestMethod.GET)
 	// public ModelAndView gradesPage(@PathVariable("courseId") int courseId) {
@@ -62,5 +65,14 @@ public class GradeController {
 	// // }
 	// // return model;
 	// }
+	
+	@RequestMapping(value = "/grades/{userId}", method = RequestMethod.GET)
+	public ModelAndView assignGradesPage(@PathVariable("courseId") int courseId, @PathVariable("userId") int userId){
+		ModelAndView model = new ModelAndView();
+		List<AssignResponseModel> assignReses = gradeService.getResponsesByUserIdAndCourseId(userId, courseId);
+		model.addObject("assignReses", assignReses);
+		model.setViewName("assignReses");
+		return model;
+	}
 
 }
