@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import lms.dao.AssignResponseDAO;
 import lms.dao.GradeDAO;
 import lms.model.AssignResponseModel;
 import lms.service.GradeService;
@@ -13,6 +14,8 @@ import lms.service.GradeService;
 public class GradeServiceImpl implements GradeService {
 	@Autowired
 	private GradeDAO gradeDAO;
+	@Autowired
+	private AssignResponseDAO assignResponseDAO;
 
 	@Override
 	public boolean gradeAssignResponse(AssignResponseModel assignRes) {
@@ -21,8 +24,7 @@ public class GradeServiceImpl implements GradeService {
 
 	@Override
 	public AssignResponseModel getByUserIdAndAssignId(int userId, int assignId) {
-		// TODO Auto-generated method stub
-		return null;
+		return assignResponseDAO.getByUserIdAndAssignId(userId, assignId);
 	}
 
 	@Override

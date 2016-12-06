@@ -25,6 +25,7 @@ import lms.model.FileModel;
 import lms.model.UIGradeBookModel;
 import lms.model.UIMenu;
 import lms.model.UIUserModel;
+import lms.model.UserModel;
 import lms.service.AssignmentService;
 import lms.service.CourseService;
 import lms.service.FileService;
@@ -45,55 +46,86 @@ public class GradeController {
 	@Autowired
 	private AssignmentService assignmentService;
 
+	@Secured({ "ROLE_INSTR", "ROLE_STU" })
 	@RequestMapping(value = "/grades", method = RequestMethod.GET)
-	public ModelAndView gradesPage(@PathVariable("courseId") int courseId) {
-		ModelAndView model = new ModelAndView();
-		List<AssignmentModel> assignments = assignmentService.getAssignmentByCourseId(courseId);
-		List<UIGradeBookModel> grades = new ArrayList<UIGradeBookModel>();
-		List<UIUserModel> students = userService.getStudentsOfCourse(courseId);
-		for (UIUserModel student : students) {
-			UIGradeBookModel gradeBook = new UIGradeBookModel();
-			gradeBook.setStudent(student);
-			Map<Integer, AssignResponseModel> gradeLine = new HashMap<Integer, AssignResponseModel>();
-			List<AssignResponseModel> responses = gradeService.getResponsesByUserIdAndCourseId(student.getId(),
-					courseId);
-			for (AssignResponseModel response : responses) {
-				gradeLine.put(response.getAssignmentId(), response);
+	public ModelAndView gradesPage(@PathVariable("courseId") int courseId, Authentication authentication) {
+		if ("[ROLE_INSTR]".equals(authentication.getAuthorities().toString())) {
+			ModelAndView model = new ModelAndView();
+			List<AssignmentModel> assignments = assignmentService.getAssignmentByCourseId(courseId);
+			List<UIGradeBookModel> grades = new ArrayList<UIGradeBookModel>();
+			List<UIUserModel> students = userService.getStudentsOfCourse(courseId);
+			for (UIUserModel student : students) {
+				UIGradeBookModel gradeBook = new UIGradeBookModel();
+				gradeBook.setStudent(student);
+				Map<Integer, AssignResponseModel> gradeLine = new HashMap<Integer, AssignResponseModel>();
+				List<AssignResponseModel> responses = gradeService.getResponsesByUserIdAndCourseId(student.getId(),
+						courseId);
+				for (AssignResponseModel response : responses) {
+					gradeLine.put(response.getAssignmentId(), response);
+				}
+				gradeBook.setGrades(gradeLine);
+				grades.add(gradeBook);
 			}
-			gradeBook.setGrades(gradeLine);
-			grades.add(gradeBook);
+			CourseModel course = courseService.getCourseById(courseId);
+			model.addObject("uiMenu", new UIMenu(course.getCode(), 3, true));
+			model.addObject("course", course);
+			model.addObject("grades", grades);
+			model.addObject("assignments", assignments);
+			model.setViewName("grades");
+			return model;
+		} else {
+			ModelAndView model = new ModelAndView();
+			List<AssignResponseModel> assignReses = gradeService
+					.getResponsesByUserIdAndCourseId(((UserModel) authentication.getPrincipal()).getId(), courseId);
+			CourseModel course = courseService.getCourseById(courseId);
+			model.addObject("uiMenu", new UIMenu(course.getCode(), 3, true));
+			model.addObject("course", course);
+			model.addObject("assignReses", assignReses);
+
+			model.setViewName("assignReses");
+			return model;
 		}
-		CourseModel course = courseService.getCourseById(courseId);
-		model.addObject("uiMenu", new UIMenu(course.getCode(), 3, true));
-		model.addObject("course", course);
-		model.addObject("grades", grades);
-		model.addObject("assignments", assignments);
-		model.setViewName("grades");
-		return model;
 	}
 
-	@RequestMapping(value = "/grades/{userId}", method = RequestMethod.GET)
-	public ModelAndView assignGradesPage(@PathVariable("courseId") int courseId, @PathVariable("userId") int userId) {
-		ModelAndView model = new ModelAndView();
-		List<AssignResponseModel> assignReses = gradeService.getResponsesByUserIdAndCourseId(userId, courseId);
-		model.addObject("assignReses", assignReses);
-		model.setViewName("assignReses");
-		return model;
-	}
-
+	// @RequestMapping(value = "/grades/{userId}", method = RequestMethod.GET)
+	// public ModelAndView assignGradesPage(@PathVariable("courseId") int
+	// courseId, @PathVariable("userId") int userId) {
+	// ModelAndView model = new ModelAndView();
+	// List<AssignResponseModel> assignReses =
+	// gradeService.getResponsesByUserIdAndCourseId(userId, courseId);
+	// model.addObject("assignReses", assignReses);
+	// model.setViewName("assignReses");
+	// return model;
+	// }
+	@Secured({ "ROLE_INTR" })
 	@RequestMapping(value = "/assignment/{assignmentId}/student/{studentid}", method = RequestMethod.GET)
-	public ModelAndView assignGradesPage1(@PathVariable("courseId") int courseId,
+	public ModelAndView assignGradesPage(@PathVariable("courseId") int courseId,
 			@PathVariable("assignmentId") int assignmentId, @PathVariable("studentid") int studentid) {
 
 		ModelAndView model = new ModelAndView();
 		CourseModel course = courseService.getCourseById(courseId);
 		AssignResponseModel response = gradeService.getByUserIdAndAssignId(studentid, assignmentId);
 		FileModel file = fileService.getPathByFileId(response.getFileId());
+		AssignmentModel assignment = assignmentService.getAssignmentById(assignmentId);
 		model.addObject("uiMenu", new UIMenu(course.getCode(), 3, true));
+		model.addObject("course", course);
 		model.addObject("assignmentId", assignmentId);
 		model.addObject("studentid", studentid);
 		model.addObject("file", file);
+		model.addObject("response", response);
+		model.addObject("assignment", assignment);
 		model.setViewName("assignmentGrade");
+		// need file download
 		return model;
+	}
+
+	@Secured({ "ROLE_INTR" })
+	@RequestMapping(value = "/assignment/{assignmentId}/student/{studentid}", method = RequestMethod.POST)
+	public String assignGrades(@PathVariable("courseId") int courseId, @PathVariable("assignmentId") int assignmentId,
+			@PathVariable("studentid") int studentid, AssignResponseModel grademodel) {
+		grademodel.setAssignmentId(assignmentId);
+		grademodel.setUserId(studentid);
+		gradeService.gradeAssignResponse(grademodel);
+		return "redirect:/course/" + courseId + "/grades";
 	}
 }

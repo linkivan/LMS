@@ -50,7 +50,7 @@
 														<c:set var="final" value="${0}"/>
 														<c:forEach var="assignment" items="${assignments}">
 															<c:set var="showScore" value="${gradeBookModel.grades.containsKey(assignment.id)? gradeBookModel.grades[assignment.id].grade : 0 }" />
-															<td><a href="Instructor-Grade Response.html">
+															<td><a href="<c:url value='/course/${course.id}/assignment/${assignment.id}/student/${gradeBookModel.student.id}' />">
 															${showScore}/${assignment.totalScore}</a></td>
 															<c:set var="total" value="${total + showScore }"/>
 															<c:set var="score" value="${score + assignment.totalScore }"/>

@@ -17,15 +17,16 @@
 
 				<div class="row">
 					<div class="col-lg-12">
-						<h1 class="page-header">Assignment Grade</h1>
+						<h1 class="page-header">${assignment.name} Grade </h1>
 					</div>
 				</div>
 
 				<!-- ... Your content goes here ... -->
 				<div id="search panel">
-					<form class="form-horizontal" action="<c:url value='/courses' />"
+					<form class="form-horizontal" action="<c:url value='/course/${course.id}/assignment/${assignmentId}/student/${studentid}' />"
 						method="POST">
-
+						<inptr type="hidden" name="">
+						<c:if test="${not empty file}">
 						<div class="form-group">
 							<label for="inputcode" class="col-sm-2 control-label ">Response
 							</label>
@@ -33,6 +34,7 @@
 								<a for="inputcode" class="col-sm-2 control-label " href="">assignment1_student1.doc</a>
 							</div>
 						</div>
+						</c:if>
 						<div class="form-group">
 							<label for="inputcode" class="col-sm-2 control-label ">Grade</label>
 							<div class="col-sm-3">
@@ -48,6 +50,8 @@
 								<button type="cancel" class="btn btn-danger ml20">Cancel</button>
 							</div>
 						</div>
+						<input type="hidden" name="${_csrf.parameterName}"
+							value="${_csrf.token}" />
 					</form>
 				</div>
 			</div>
