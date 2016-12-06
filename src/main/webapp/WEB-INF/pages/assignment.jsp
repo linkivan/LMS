@@ -4,7 +4,7 @@
 <%@page session="true"%>
 <html>
 <head>
-<title>Add Assignment</title>
+<title>Assignment Detail</title>
 <%@ include file="common/header.jsp"%>
 </head>
 <body>
@@ -32,9 +32,8 @@
 					</c:if>
 					<sec:authorize access="hasRole('ROLE_INSTR')">
 						<form name='assignmentForm' class="form-horizontal"
-							action="<c:url value='/course/${course.id}/assignment/${assignment.id}' />"
-							method='POST'>
-							<input type="hidden" name="_method" value="put" />
+							action="<c:url value='/course/${course.id}/assignment/${assignment.id}?${_csrf.parameterName}=${_csrf.token}' />"
+							method='POST' enctype="multipart/form-data">
 							<div class="form-group row">
 								<label class="col-sm-2 control-label ">Name:</label>
 								<div class="col-sm-3">
@@ -92,8 +91,16 @@
 							</div>
 							<div class="form-group row">
 								<label for="inputcode" class="col-sm-2 control-label ">File:</label>
-								<div class="col-sm-3">
-									<input type="file" class="form-control-file">
+								<div class="col-sm-5">
+									<c:if test="${not empty fileModel}">
+										<div class="col-sm-12">
+											<a class="control-label"
+												href="<c:url value='/course/${course.id}/files/${fileModel.fileName}?fileLocation=${fileModel.filePath}' />">${fileModel.fileName}</a>
+										</div>
+									</c:if>
+									<div class="col-sm-12">
+										<input type="file" class="form-control-file" name="fileUpload">
+									</div>
 								</div>
 							</div>
 							<div class="form-group row">
@@ -115,62 +122,53 @@
 									<button onclick="history.back()" class="btn btn-danger ml20">Cancel</button>
 								</div>
 							</div>
-
-							<input type="hidden" name="${_csrf.parameterName}"
-								value="${_csrf.token}" />
 						</form>
 					</sec:authorize>
 					<sec:authorize access="hasRole('ROLE_STU')">
 						<div id="search panel">
-							<form class="form-horizontal"
-								action="Student_submit_asssignment.html" method="get">
+							<form class="form-horizontal">
 
 								<div class="form-group">
-									<label for="inputcode" class="col-sm-2 control-label ">Name:</label>
+									<label class="col-sm-2 control-label ">Name:</label>
 									<div class="col-sm-3">
-										<label for="inputcode" class="col-sm-2 control-label ">${assignment.name}</label>
-										<br />
+										<label class="control-label">${assignment.name}</label>
 									</div>
 								</div>
 								<div class="form-group">
-									<label for="inputcode" class="col-sm-2 control-label ">Due
-										Date:</label>
-									<div class="col-sm-6">
-										<label for="inputcode" class=" col-sm-12 ">${assignment.dueDate}</label>
-
+									<label class="col-sm-2 control-label ">Due Date:</label>
+									<div class="col-sm-3">
+										<label class="control-label">${assignment.dueDate}</label>
 									</div>
 								</div>
 
 								<div class="form-group">
-									<label for="inputcode" class="col-sm-2 control-label ">Total
-										Score:</label>
+									<label class="col-sm-2 control-label ">Total Score:</label>
 									<div class="col-sm-3">
-										<label for="inputcode" class="col-sm-2 control-label ">${assignment.totalScore}</label>
+										<label class="control-label ">${assignment.totalScore}</label>
 									</div>
 								</div>
 								<div class="form-group">
-									<label for="inputcode" class="col-sm-2 control-label ">Weight:</label>
+									<label class="col-sm-2 control-label ">Weight:</label>
 									<div class="col-sm-3">
-										<label for="inputcode" class="col-sm-2 control-label ">${assignment.weight}</label>
+										<label class="control-label ">${assignment.weight}</label>
 									</div>
 								</div>
 								<div class="form-group">
-									<label for="inputcode" class="col-sm-2 control-label ">Description:</label>
+									<label class="col-sm-2 control-label ">Description:</label>
 									<div class="col-sm-3">
-										<p class="col-sm-14 pl15">${assignment.description}</p>
+										<label class="control-label ">${assignment.description}</label>
 									</div>
 								</div>
 								<div class="form-group">
-									<label for="inputcode" class="col-sm-2 control-label ">File:</label>
+									<label class="col-sm-2 control-label ">File:</label>
 									<div class="col-sm-3">
-										<label for="inputcode" class="col-sm-2 control-label ">${filePath}</label>
+										<a class="control-label" href="<c:url value='/course/${course.id}/files/${fileModel.fileName}?fileLocation=${fileModel.filePath}' />">${fileModel.fileName}</a>
 									</div>
 								</div>
 								<div class="form-group">
-									<label for="inputcode" class="col-sm-2 control-label ">Submit
-										By:</label>
+									<label class="col-sm-2 control-label ">Submit By:</label>
 									<div class="col-sm-3">
-										<label for="inputcode" class="col-sm-2 control-label ">${assignment.submitBy}</label>
+										<label class="control-label ">${assignment.submitBy}</label>
 									</div>
 								</div>
 								<div class="form-group">

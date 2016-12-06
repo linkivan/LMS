@@ -27,8 +27,9 @@ public class AssignmentDAOImpl implements AssignmentDAO {
 
 	@Override
 	public int addAssignment(final AssignmentModel assignment) {
-		final String sql = "INSERT INTO assignment (name, course_id, dueDate, status,  totalScore, weight, submit_by, description)"
-				+ " VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+		final String sql = "INSERT INTO assignment (name, course_id, dueDate, status, totalScore, weight, submit_by, description"
+				+ (assignment.getFileId() == 0 ? ")" : ", file_id)") + " VALUES (?, ?, ?, ?, ?, ?, ?, ?"
+				+ (assignment.getFileId() == 0 ? ")" : ",?)");
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		jdbcTemplate.update(new PreparedStatementCreator() {
 
@@ -43,6 +44,9 @@ public class AssignmentDAOImpl implements AssignmentDAO {
 				ps.setString(6, assignment.getWeight());
 				ps.setString(7, assignment.getSubmitBy());
 				ps.setString(8, assignment.getDescription());
+				if (assignment.getFileId() != 0) {
+					ps.setInt(9, assignment.getFileId());
+				}
 				return ps;
 			}
 
@@ -53,11 +57,20 @@ public class AssignmentDAOImpl implements AssignmentDAO {
 
 	@Override
 	public boolean modifyAssignment(AssignmentModel assignment) {
-		String sql = "UPDATE assignment SET name = ?, dueDate = ?, status = ?, totalScore = ?, weight = ?, course_id = ?, submit_by =?, description=?"
-				+ "WHERE id = ?";
-		jdbcTemplate.update(sql, assignment.getName(), assignment.getDueDate(), assignment.getStatus(),
-				assignment.getTotalScore(), assignment.getWeight(), assignment.getCourseId(), assignment.getSubmitBy(),
-				assignment.getDescription(), assignment.getId());
+		if (assignment.getFileId() != 0) {
+			String sql = "UPDATE assignment SET name = ?, dueDate = ?, status = ?, totalScore = ?, weight = ?, course_id = ?, submit_by =?, description=?, file_id = ?"
+					+ " WHERE id = ?";
+			jdbcTemplate.update(sql, assignment.getName(), assignment.getDueDate(), assignment.getStatus(),
+					assignment.getTotalScore(), assignment.getWeight(), assignment.getCourseId(),
+					assignment.getSubmitBy(), assignment.getDescription(), assignment.getFileId(), assignment.getId());
+		} else {
+			String sql = "UPDATE assignment SET name = ?, dueDate = ?, status = ?, totalScore = ?, weight = ?, course_id = ?, submit_by =?, description=?"
+					+ " WHERE id = ?";
+			jdbcTemplate.update(sql, assignment.getName(), assignment.getDueDate(), assignment.getStatus(),
+					assignment.getTotalScore(), assignment.getWeight(), assignment.getCourseId(),
+					assignment.getSubmitBy(), assignment.getDescription(), assignment.getId());
+
+		}
 		return true;
 	}
 

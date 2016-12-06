@@ -11,7 +11,7 @@ import lms.model.FileModel;
 public interface AssignmentService {
 	public int addAssignment(AssignmentModel assignment, FileItem assignmentFile);
 
-	public boolean modifyAssignment(AssignmentModel assignment);
+	public boolean modifyAssignment(AssignmentModel assignment, FileItem assignmentFile);
 
 	public boolean deleteAssignment(int assignmentId);
 

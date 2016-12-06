@@ -37,18 +37,34 @@ public class AssignmentServiceImpl implements AssignmentService {
 		CourseModel course = courseDAO.getCourseById(assignment.getCourseId());
 		int fileId = 0;
 		try {
-			fileId = fileService.createAssignmentFile(assignmentFile, course, assignment.getName(),
-					this.currentUserName());
+			if (!"".equals(assignmentFile.getName())) {
+				fileId = fileService.createAssignmentFile(assignmentFile, course, assignment.getName(),
+						this.currentUserName());
+			}
+
+			assignment.setFileId(fileId);
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		assignment.setFileId(fileId);
 		return assignmentDAO.addAssignment(assignment);
 	}
 
 	@Override
-	public boolean modifyAssignment(AssignmentModel assignment) {
+	public boolean modifyAssignment(AssignmentModel assignment, FileItem assignmentFile) {
+		CourseModel course = courseDAO.getCourseById(assignment.getCourseId());
+		int fileId = 0;
+		try {
+			if (!"".equals(assignmentFile.getName())) {
+				fileId = fileService.createAssignmentFile(assignmentFile, course, assignment.getName(),
+						this.currentUserName());
+			}
+			assignment.setFileId(fileId);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		return assignmentDAO.modifyAssignment(assignment);
 	}
@@ -82,7 +98,7 @@ public class AssignmentServiceImpl implements AssignmentService {
 
 	@Override
 	public boolean submitAssignResponse(AssignResponseModel assignmentResponse) {
-		
+
 		return assignResponseDAO.addAssignResponse(assignmentResponse);
 	}
 

@@ -2,8 +2,9 @@ package lms.service;
 
 import java.util.List;
 
+import org.springframework.security.core.Authentication;
+
 import lms.model.UIUserModel;
-import lms.model.UserModel;
 
 public interface UserService {
 	UIUserModel getUserByUsername(String username);

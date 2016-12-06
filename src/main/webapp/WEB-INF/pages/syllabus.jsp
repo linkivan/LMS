@@ -27,13 +27,15 @@
 						<form class="form-horizontal"
 							action="<c:url value='/course/${course.id}/syllabus?${_csrf.parameterName}=${_csrf.token}' />"
 							method="POST" enctype="multipart/form-data">
+							<c:if test="${not empty syllabus}">
 							<div class="form-group">
 								<label for="inputcode" class="col-sm-2 control-label ">
 									Current Syllabus </label>
 								<div class="col-sm-3">
-									<a class="col-sm-2 control-label " href="<c:url value='/course/${course.id}/files/${syllabus.fileName}?fileLocation=${syllabus.fileLocation}' />">${syllabus.fileName}</a><br />
+									<a class="col-sm-2 control-label " href="<c:url value='/course/${course.id}/files/${syllabus.fileName}?fileLocation=${syllabus.filePath}' />">${syllabus.fileName}</a><br />
 								</div>
 							</div>
+							</c:if>
 							<div class="form-group">
 								<label for="inputcode" class="col-sm-2 control-label ">New Syllabus</label>
 								<div class="col-sm-3">
@@ -52,13 +54,17 @@
 					<div id="search panel">
 						<form class="form-horizontal" action="<c:url value='/courses' />"
 							method="get">
-
+							<c:if test="${not empty syllabus}">
 							<div class="form-group">
 								<div class="col-sm-3">
-									<a class="col-sm-2 control-label " href="<c:url value='/course/${course.id}/files/${syllabus.fileName}?fileLocation=${syllabus.fileLocation}' />">${syllabus.fileName}</a>
+									<a class="col-sm-2 control-label " href="<c:url value='/course/${course.id}/files/${syllabus.fileName}?fileLocation=${syllabus.filePath}' />">${syllabus.fileName}</a>
 
 								</div>
 							</div>
+							</c:if>
+							<c:if test="${ empty syllabus}">
+							No syllabus for this course yet!
+							</c:if>
 						</form>
 
 					</div>

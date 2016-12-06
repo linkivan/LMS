@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
@@ -71,6 +73,16 @@ public class CustomUserDetailsDAO extends JdbcDaoImpl {
 				userFromUserQuery.isEnabled(), userFromUserQuery.isAccountNonExpired(),
 				userFromUserQuery.isCredentialsNonExpired(), userFromUserQuery.isAccountNonLocked(),
 				combinedAuthorities);
+	}
+
+	public boolean isCurrentUserinCourse(Authentication authentication, int courseId) {
+		if (!(authentication instanceof AnonymousAuthenticationToken)) {
+			String sql = "SELECT COUNT(*) FROM users_courses WHERE user_id=? and course_id=?";
+			Integer count = getJdbcTemplate().queryForObject(sql,
+					new Object[] { ((UserModel) authentication.getPrincipal()).getId(), courseId }, Integer.class);
+			return count != 0;
+		}
+		return false;
 	}
 
 }
