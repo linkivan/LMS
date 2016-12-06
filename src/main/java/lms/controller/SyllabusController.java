@@ -36,9 +36,6 @@ public class SyllabusController {
 	private CourseService courseService;
 	@Autowired
 	private FileService fileService;
-	@Autowired
-	private ServletContext servletContext;
-    
 	// upload settings
     private static final int MEMORY_THRESHOLD = 1024 * 1024 * 3;  // 3MB
     private static final int MAX_FILE_SIZE    = 1024 * 1024 * 40; // 40MB
@@ -49,7 +46,7 @@ public class SyllabusController {
 	public ModelAndView syllabusPage(@PathVariable("courseId") int courseId) {
 		ModelAndView model = new ModelAndView();
 		CourseModel course = courseService.getCourseById(courseId);
-		FileModel syllabus = fileService.getSyllabusPathByCourseId(courseId);
+		FileModel syllabus = fileService.getSyllabusByCourseId(courseId);
 		model.addObject("uiMenu", new UIMenu(course.getCode(), 5, true));
 		model.addObject("syllabus", syllabus);
 		model.addObject("course", course);

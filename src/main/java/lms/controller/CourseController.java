@@ -32,6 +32,8 @@ public class CourseController {
 
 	@Autowired
 	private CourseService courseService;
+	@Autowired
+	private ServletContext servletContext;
 
 	@RequestMapping(value = "/courses", method = RequestMethod.GET)
 	public ModelAndView coursesPage(String code, String semester, Authentication authentication) {
@@ -106,11 +108,65 @@ public class CourseController {
 	}
 
 	@RequestMapping(value = "/course/{id}/files/{fileName:.+}", method = RequestMethod.GET)
-	public void downloadPDFResource(HttpServletRequest request, HttpServletResponse response,
-			@PathVariable("fileName") String fileName, String fileLocation) {
+	public void downloadFile(HttpServletRequest request, HttpServletResponse response,
+			@PathVariable("fileName") String fileName, String fileLocation) throws IOException {
 		// If user is not authorized - he should be thrown out from here itself
-
 		// Authorized user will download the file
+		
+		File file = new File(fileLocation + "/" + fileName);
+		
+		if(!file.exists()) {
+            System.out.println("File doesn't exist or, not found!");
+            // Throw an exception, or send 404 if file not found
+            response.sendError(HttpServletResponse.SC_NOT_FOUND); // 404.
+            return;
+		}
+		
+        String mimeType = servletContext.getMimeType(file.getName());
+        
+        if (mimeType == null) {
+            // set to binary type if MIME mapping not found
+            mimeType = "application/octet-stream";
+        }
+        
+        System.out.println("MIME type : " + mimeType);
+        
+        response.reset();
+        response.setContentType(mimeType);
+        response.setContentLength((int) file.length());
+        response.setHeader("Content-Disposition", "attachment; filename=\"" + file.getName() + "\"");
+        
+        System.out.println("File name           : " + file.getName());
+        System.out.println("File absolute path  : " + file.getAbsolutePath());
+        System.out.println("File canonical path : " + file.getCanonicalPath());
+        
+        OutputStream out = null;
+        
+        try {
+            FileInputStream in = new FileInputStream(file);
+            byte []         buffer = new byte[1024];
+            int             length = 0;
+            
+            out = response.getOutputStream();
+            while ((length = in.read(buffer)) > 0) {
+                out.write(buffer, 0, length);
+            }
+            in.close();
+            out.flush();
+        } catch (IOException err) {
+            err.printStackTrace();
+        } finally {
+            try {
+                if (out != null) {
+                    out.close();
+                    System.out.println("File downloaded successfully...");
+                }
+            } catch (IOException err) {
+                err.printStackTrace();
+            }
+        }
+        
+		/*
 		String dataDirectory = request.getServletContext().getRealPath(fileLocation);
 		Path file = Paths.get(dataDirectory, fileName);
 		if (Files.exists(file)) {
@@ -123,6 +179,6 @@ public class CourseController {
 				ex.printStackTrace();
 			}
 		}
+		*/
 	}
-
 }

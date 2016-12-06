@@ -23,7 +23,7 @@ public class FileDAOImpl implements FileDAO {
 	
 	@Override
 	public int createFile(FileModel file) {
-		final String sql = "INSERT INTO file (upload_time, uploader_name, file_path, file_name)" + " VALUES (?, ?, ?, ?)";
+		final String sql = "INSERT INTO file (upload_time, uploader_name, file_path, file_name) VALUES (?, ?, ?, ?)";
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		
 		jdbcTemplate.update(new PreparedStatementCreator() {
@@ -72,5 +72,63 @@ public class FileDAOImpl implements FileDAO {
 		});
 		
 		return retVal;
+	}
+	
+	@Override
+	public FileModel getSyllabusByCourseId(int courseId) {
+		FileModel retVal = null;
+		String sql = " SELECT file.id,"
+				   + "        file.uploader_name,"
+				   + "        file.file_path,"
+				   + "        file.file_name,"
+				   + "        file.upload_time"
+				   + "   FROM file, syllabus "
+				   + "  WHERE file.id = syllabus.file_id "
+				   + "    AND syllabus.course_id = ?";
+		
+		try {
+			retVal = jdbcTemplate.queryForObject(sql, new Object[] { courseId }, new RowMapper<FileModel>() {
+				@Override
+				public FileModel mapRow(ResultSet rs, int rowNum) throws SQLException {
+					FileModel file = new FileModel(rs.getInt("id"),
+							       			   	   rs.getString("uploader_name"),
+							       			   	   rs.getString("file_path"),
+							       			   	   rs.getString("file_name"));
+				
+					file.setTimeStamp(rs.getTimestamp("upload_time"));
+				
+					return file;
+				}
+			});
+		} catch (Exception e) {
+			System.out.println("Exception in getSyllabusByCourseId :=> " + e.getMessage());
+		}
+		
+		return retVal;
+	}
+	
+	@Override
+	public int addSyllabusInfo(int fileId, int courseId) { 
+		final String sql = "INSERT INTO syllabus (file_id, course_id) VALUES (?, ?)";
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+		
+		jdbcTemplate.update(new PreparedStatementCreator() {
+			int fileId, courseId;
+			
+			@Override
+			public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+				PreparedStatement ps = connection.prepareStatement(sql);
+				ps.setInt(1, fileId);
+				ps.setInt(2, courseId);
+				return ps;
+			}
+			private PreparedStatementCreator init(int fileId, int courseId) {
+				this.fileId = fileId;
+				this.courseId = courseId;
+				return this;
+			}
+		}.init(fileId, courseId), keyHolder);
+		
+		return keyHolder.getKey().intValue();
 	}
 }
