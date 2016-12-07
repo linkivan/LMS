@@ -37,14 +37,14 @@
 							<label for="code" class="col-sm-2 control-label ">Code:</label>
 							<div class="col-sm-3">
 								<input type="text" class="form-control" name='code' id="code"
-									placeholder="Code">
+									placeholder="Code" required>
 							</div>
 						</div>
 						<div class="form-group">
 							<label for="semester" class="col-sm-2 control-label ">Semester</label>
 							<div class="col-sm-3">
-								<select name="semester" id="semester" class="form-control">
-									<option value="Select">Select</option>
+								<select name="semester" id="semester" class="form-control" required>
+									<option value="">Select</option>
 									<option value="Fall2016">Fall2016</option>
 									<option value="Winter2016">Winter2016</option>
 									<option value="Spring2017">Spring2017</option>
@@ -75,8 +75,8 @@
 						</div>
 						<div class="form-group">
 							<div class="col-sm-offset-2 col-sm-3">
-								<button type="submit" name="submit" class="btn btn-danger ml20">Submit</button>
-								<button type="button" class="btn btn-danger ml20" name="Cancel"
+								<button type="submit" name="submit" class="btn btn-primary ml20">Submit</button>
+								<button type="button" class="btn btn-primary ml20" name="Cancel"
 									onclick="history.back()">Cancel</button>
 							</div>
 						</div>

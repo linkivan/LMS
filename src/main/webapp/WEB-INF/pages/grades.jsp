@@ -30,7 +30,7 @@
 								<!-- /.panel-heading -->
 								<div class="panel-body">
 									<div class="table-responsive">
-										<table class="table table-hover  ">
+										<table class="table table-hover table-striped ">
 											<thead>
 												<tr>
 													<th>Student</th>
@@ -45,18 +45,28 @@
 												<c:forEach var="gradeBookModel" items="${grades}">
 													<tr>
 														<td>${gradeBookModel.student.username }</td>
-														<c:set var="total" value="${0}"/>
-														<c:set var="score" value="${0}"/>
-														<c:set var="final" value="${0}"/>
+														<c:set var="total" value="0"/>
+														<c:set var="score" value="0"/>
+														<c:set var="final" value="0"/>
 														<c:forEach var="assignment" items="${assignments}">
 															<c:set var="showScore" value="${gradeBookModel.grades.containsKey(assignment.id)? gradeBookModel.grades[assignment.id].grade : 0 }" />
-															<td><a href="<c:url value='/course/${course.id}/assignment/${assignment.id}/student/${gradeBookModel.student.id}' />">
-															${showScore}/${assignment.totalScore}</a></td>
+															<td>
+															<c:if test="${gradeBookModel.grades.containsKey(assignment.id)}">
+															<a href="<c:url value='/course/${course.id}/assignment/${assignment.id}/student/${gradeBookModel.student.id}' />">
+															${gradeBookModel.grades[assignment.id].grade}/${assignment.totalScore}</a>
+															</c:if>
+															<c:if test="${not gradeBookModel.grades.containsKey(assignment.id)}">
+															
+															--/${assignment.totalScore}
+															</c:if>
+															</td>
 															<c:set var="total" value="${total + showScore }"/>
 															<c:set var="score" value="${score + assignment.totalScore }"/>
 														</c:forEach>
 														<td>${total}/${score}</td>
-														<td><fmt:formatNumber type="percent" maxIntegerDigits="3" value="${total/score}" /></td>
+														<td>
+															<fmt:formatNumber type="percent" maxFractionDigits="0" value="${total/score}" />
+														</td>
 													</tr>
 												</c:forEach>
 

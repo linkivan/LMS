@@ -88,7 +88,7 @@
 						</div>
 					</c:if>
 					<c:if test="${empty courses}">
-						<div class="alert alert-danger">No course found!</div>
+						<div class="alert alert-danger">No course found! Please change your parameters or add a course!</div>
 					</c:if>
 				</sec:authorize>
 				<sec:authorize access="hasRole('ROLE_INSTR') or hasRole('ROLE_STU')">
@@ -98,6 +98,9 @@
 							  <li class="list-group-item"><a href="<c:url value='/course/${course.id}' />">${course.code} - ${course.semester}</a></li>
 							</ul>
 						</c:forEach>
+					</c:if>
+					<c:if test="${ empty courses}">
+						<div class="alert alert-danger">You have no courses now!</div>
 					</c:if>
 				</sec:authorize>
 			</div>

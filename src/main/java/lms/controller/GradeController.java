@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,6 +35,8 @@ import lms.service.UserService;
 
 @Controller
 @RequestMapping(value = "/course/{courseId}")
+@PreAuthorize("@userService.isCurrentUserinCourse(authentication, #courseId)")
+
 public class GradeController {
 	@Autowired
 	private GradeService gradeService;
@@ -87,17 +90,7 @@ public class GradeController {
 		}
 	}
 
-	// @RequestMapping(value = "/grades/{userId}", method = RequestMethod.GET)
-	// public ModelAndView assignGradesPage(@PathVariable("courseId") int
-	// courseId, @PathVariable("userId") int userId) {
-	// ModelAndView model = new ModelAndView();
-	// List<AssignResponseModel> assignReses =
-	// gradeService.getResponsesByUserIdAndCourseId(userId, courseId);
-	// model.addObject("assignReses", assignReses);
-	// model.setViewName("assignReses");
-	// return model;
-	// }
-	@Secured({ "ROLE_INTR" })
+	@Secured({ "ROLE_INSTR" })
 	@RequestMapping(value = "/assignment/{assignmentId}/student/{studentid}", method = RequestMethod.GET)
 	public ModelAndView assignGradesPage(@PathVariable("courseId") int courseId,
 			@PathVariable("assignmentId") int assignmentId, @PathVariable("studentid") int studentid) {
@@ -119,7 +112,7 @@ public class GradeController {
 		return model;
 	}
 
-	@Secured({ "ROLE_INTR" })
+	@Secured({ "ROLE_INSTR" })
 	@RequestMapping(value = "/assignment/{assignmentId}/student/{studentid}", method = RequestMethod.POST)
 	public String assignGrades(@PathVariable("courseId") int courseId, @PathVariable("assignmentId") int assignmentId,
 			@PathVariable("studentid") int studentid, AssignResponseModel grademodel) {

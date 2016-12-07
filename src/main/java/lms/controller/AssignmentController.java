@@ -8,6 +8,7 @@ import java.util.List;
 import org.apache.commons.fileupload.FileItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,6 +32,7 @@ import lms.service.GradeService;
 
 @Controller
 @RequestMapping(value = "/course/{courseId}")
+@PreAuthorize("@userService.isCurrentUserinCourse(authentication, #courseId)")
 public class AssignmentController {
 	@Autowired
 	private AssignmentService assignmentService;
@@ -41,6 +43,7 @@ public class AssignmentController {
 	@Autowired
 	private GradeService gradeService;
 
+	@Secured({ "ROLE_INSTR", "ROLE_STU" })
 	@RequestMapping(value = "/assignments", method = RequestMethod.GET)
 	public ModelAndView assignmentsPage(@PathVariable("courseId") int courseId) {
 		ModelAndView model = new ModelAndView();
@@ -55,7 +58,7 @@ public class AssignmentController {
 
 	@Secured("ROLE_INSTR")
 	@RequestMapping(value = "/assignments/new", method = RequestMethod.GET)
-	public ModelAndView assignmentForm(@PathVariable("courseId") int courseId) {
+	public ModelAndView assignmentForm(@PathVariable("courseId") int courseId, Authentication authentication) {
 
 		ModelAndView model = new ModelAndView();
 		CourseModel course = courseService.getCourseById(courseId);
@@ -103,7 +106,7 @@ public class AssignmentController {
 		assignment.setId(id);
 		assignment.setCourseId(courseId);
 		assignmentService.modifyAssignment(assignment, fileUpload.getFileItem());
-		return "redirect:/course/" + courseId + "/assignment/" + id;
+		return "redirect:/course/" + courseId + "/assignments";
 	}
 
 	@Secured("ROLE_STU")
@@ -140,7 +143,7 @@ public class AssignmentController {
 		assignRes.setUserId(((UserModel) authentication.getPrincipal()).getId());
 		assignRes.setSubmitTime(new Timestamp(new Date().getTime()));
 		assignmentService.submitAssignResponse(assignRes, responseFile);
-		return "redirect:/course/" + courseId + "/assignment/" + assignmentId + "/response";
+		return "redirect:/course/" + courseId + "/assignments/";
 	}
 
 }

@@ -38,7 +38,7 @@
 								<label class="col-sm-2 control-label ">Name:</label>
 								<div class="col-sm-3">
 									<input type="text" class="form-control" id="name"
-										value="${assignment.name }" placeholder="Name" name='name'>
+										value="${assignment.name }" placeholder="Name" name='name' required>
 								</div>
 							</div>
 							<div class="form-group row">
@@ -47,7 +47,7 @@
 								<div class="col-sm-3" data-provide="datepicker">
 									<input type="date" class="form-control"
 										placeholder="mm/dd/yyyy" name='dueDate'
-										value="${assignment.dueDate }">
+										value="${assignment.dueDate }" required>
 
 								</div>
 							</div>
@@ -55,11 +55,11 @@
 								<label for="inputPassword3" class="col-sm-2 control-label ">Status:
 								</label>
 								<div class="col-sm-3">
-									<select name="status" id="status" class="form-control">
+									<select name="status" id="status" class="form-control" required>
 										<option value="Published"
 											${"Published" == assignment.status ? 'selected' : ''}>Published</option>
 										<option value="Unpublished"
-											${"Published" == assignment.status ? 'selected' : ''}>Unpublished</option>
+											${"Unpublished" == assignment.status ? 'selected' : ''}>Unpublished</option>
 
 									</select>
 								</div>
@@ -70,17 +70,17 @@
 								<div class="col-sm-3">
 									<input type="text" class="form-control" id="totalScore"
 										name="totalScore" placeholder="Score"
-										value="${assignment.totalScore }">
+										value="${assignment.totalScore }" required>
 								</div>
 							</div>
-							<div class="form-group row">
+							<%-- <div class="form-group row">
 								<label for="weight" class="col-sm-2 control-label ">Weight:</label>
 								<div class="col-sm-3">
 									<input type="text" class="form-control" id="weight"
 										name="weight" placeholder="Percentage"
 										value="${assignment.weight }">
 								</div>
-							</div>
+							</div> --%>
 							<div class="form-group row">
 								<label class="col-sm-2 control-label">Description:</label>
 								<div class="col-sm-3">
@@ -118,8 +118,8 @@
 							</div>
 							<div class="form-group row">
 								<div class="col-sm-offset-2 col-sm-3">
-									<button type="submit" class="btn btn-danger ml20">Submit</button>
-									<button onclick="history.back()" class="btn btn-danger ml20">Cancel</button>
+									<button type="submit" class="btn btn-primary ml20">Submit</button>
+									<button onclick="history.back()" class="btn btn-primary ml20">Cancel</button>
 								</div>
 							</div>
 						</form>
@@ -147,12 +147,12 @@
 										<label class="control-label ">${assignment.totalScore}</label>
 									</div>
 								</div>
-								<div class="form-group">
+								<%-- <div class="form-group">
 									<label class="col-sm-2 control-label ">Weight:</label>
 									<div class="col-sm-3">
 										<label class="control-label ">${assignment.weight}</label>
 									</div>
-								</div>
+								</div> --%>
 								<div class="form-group">
 									<label class="col-sm-2 control-label ">Description:</label>
 									<div class="col-sm-3">
@@ -161,9 +161,17 @@
 								</div>
 								<div class="form-group">
 									<label class="col-sm-2 control-label ">File:</label>
+									<c:if test="${not empty fileModel}">					
 									<div class="col-sm-3">
 										<a class="control-label" href="<c:url value='/course/${course.id}/files/${fileModel.fileName}?fileLocation=${fileModel.filePath}' />">${fileModel.fileName}</a>
 									</div>
+									</c:if>
+									<c:if test="${ empty fileModel}">
+									<div class="col-sm-3">
+										<label class="control-label ">No File Attached</label>
+									</div>					
+										
+									</c:if>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-2 control-label ">Submit By:</label>
@@ -172,10 +180,12 @@
 									</div>
 								</div>
 								<div class="form-group">
-									<div class="col-sm-offset-2 col-sm-3">
-										<a href="<c:url value='/course/${course.id}/assignment/${assignment.id}/response' />"" class="btn btn-danger ml20">Submit
+									<div class="ml30 col-sm-1">
+										<button onclick="history.back()" class="btn btn-primary ml20">Cancel</button>
+									</div>
+									<div class="col-sm-3">
+										<a href="<c:url value='/course/${course.id}/assignment/${assignment.id}/response' />"" class="btn btn-primary ml20">Submit
 											Assignment</a>
-
 									</div>
 								</div>
 							</form>

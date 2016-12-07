@@ -14,6 +14,8 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Repository;
 
 import lms.dao.AssignmentDAO;
@@ -118,7 +120,13 @@ public class AssignmentDAOImpl implements AssignmentDAO {
 
 	@Override
 	public List<AssignmentModel> getAssignmentByCourseId(int courseId) {
-		String sql = "SELECT * FROM assignment WHERE course_id = ? ORDER BY id ASC";
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String sql = "";
+		if ("[ROLE_STU]".equals(authentication.getAuthorities().toString())) {
+			sql = "SELECT * FROM assignment WHERE course_id = ? and status = 'Published' ORDER BY id ASC";
+		} else {
+			sql = "SELECT * FROM assignment WHERE course_id = ? ORDER BY id ASC";
+		}
 
 		List<AssignmentModel> assignments = jdbcTemplate.query(sql, new Object[] { courseId },
 				new RowMapper<AssignmentModel>() {

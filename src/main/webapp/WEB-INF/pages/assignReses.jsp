@@ -5,7 +5,7 @@
 <%@page session="true"%>
 <html>
 <head>
-<title>Grades Information - User: ${userId} Course: ${courseId}</title>
+<title>Grades Information</title>
 <%@ include file="common/header.jsp"%>
 </head>
 <body>
@@ -13,50 +13,55 @@
 		<%@ include file="common/nav.jsp"%>
 		<!-- Page Content -->
 		<div id="page-wrapper">
-			<div class="page-header"></div>
-			<div class="error"></div>
-			<div class="msg"></div>
-			<div id="search panel">
-				<form class="form-horizontal" action="<c:url value='/grades/1/1' />"
-					method="get">
-					<div class="form-group">
-						<div class="row">
-							<div class="col-lg-12 ">
-								<div class="panel panel-default ">
-									<div class="panel-heading ">Grades</div>
-									<!-- /.panel-heading -->
-									<div class="panel-body">
-										<div class="table-responsive">
-											<table class="table table-hover  ">
-												<thead>
-													<tr>
-														<th class="mw30">Assignment id</th>
-														<th class="mw30">Grade</th>
-														<th class="mw30">Submit time</th>
-													</tr>
-												</thead>
-												<tbody>
-													<c:forEach var="assignReses" items="${assignReses}">
-														<tr>
-															<td>${assignReses.assignmentId}</td>
-															<td>${assignReses.grade}</td>
-															<td>${assignReses.submitTime}</td>
-														</tr>
-													</c:forEach>
-												</tbody>
-											</table>
-										</div>
-										<!-- /.table-responsive -->
-									</div>
-									<!-- /.panel-body -->
-								</div>
-								<!-- /.panel -->
-							</div>
-
-
-						</div>
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-lg-12">
+						<h1 class="page-header">Grades</h1>
 					</div>
-				</form>
+				</div>
+				<div class="error"></div>
+				<div class="msg"></div>
+				<div id="search panel">
+					<form class="form-horizontal"
+						action="<c:url value='/grades/1/1' />" method="get">
+						<div class="form-group">
+							<div class="row">
+								<div class="col-lg-12 ">
+									<div class="panel panel-default ">
+										<!-- /.panel-heading -->
+										<div class="panel-body">
+											<div class="table-responsive">
+												<table class="table table-hover  ">
+													<thead>
+														<tr>
+															<th class="mw30">Assignment id</th>
+															<th class="mw30">Grade</th>
+															<th class="mw30">Submit time</th>
+														</tr>
+													</thead>
+													<tbody>
+														<c:forEach var="assignReses" items="${assignReses}">
+															<tr>
+																<td>${assignReses.assignmentId}</td>
+																<td>${assignReses.grade}</td>
+																<td>${assignReses.submitTime}</td>
+															</tr>
+														</c:forEach>
+													</tbody>
+												</table>
+											</div>
+											<!-- /.table-responsive -->
+										</div>
+										<!-- /.panel-body -->
+									</div>
+									<!-- /.panel -->
+								</div>
+
+
+							</div>
+						</div>
+					</form>
+				</div>
 			</div>
 		</div>
 

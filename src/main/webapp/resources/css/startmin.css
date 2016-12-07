@@ -185,7 +185,7 @@ body {
     color: #f0ad4e;
 }
 
-.btn-danger.btn-outline {
+.btn-primary.btn-outline {
     color: #d9534f;
 }
 
@@ -193,7 +193,7 @@ body {
 .btn-success.btn-outline:hover,
 .btn-info.btn-outline:hover,
 .btn-warning.btn-outline:hover,
-.btn-danger.btn-outline:hover {
+.btn-primary.btn-outline:hover {
     color: #fff;
 }
 

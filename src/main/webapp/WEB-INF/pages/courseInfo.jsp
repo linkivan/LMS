@@ -49,7 +49,7 @@
 						<div class="form-group">
 							<div class="col-sm-offset-2 col-sm-3">
 								<a href="<c:url value='/course/${course.id}/info' />"
-									class="btn btn-danger">Modify</a>
+									class="btn btn-primary">Modify</a>
 							</div>
 						</div>
 					</sec:authorize>

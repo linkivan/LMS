@@ -84,8 +84,8 @@ public class AssignmentServiceImpl implements AssignmentService {
 
 	@Override
 	public List<AssignmentModel> getAssignmentByCourseId(int courseId) {
-		// TODO Auto-generated method stub
 		return assignmentDAO.getAssignmentByCourseId(courseId);
+
 	}
 
 	private String currentUserName() {

@@ -4,7 +4,7 @@
 <%@page session="true"%>
 <html>
 <head>
-<title>Add Assignment</title>
+<title>Assignments</title>
 <%@ include file="common/header.jsp"%>
 </head>
 <body>
@@ -33,16 +33,25 @@
 					<div>
 						<div id="courses" class="panel-heading">
 							<table class="table table-striped table-hover">
+							<thead>
 								<tr>
 									<th>Assignments</th>
-									<th>Due Dates</th>
+									<th>Due Date</th>
+									<sec:authorize access="hasRole('ROLE_INSTR')">
+									<th>Status</th>
+									</sec:authorize>
 									<th>Action</th>
 								</tr>
+								</thead>
+								<tbody>
 								<c:forEach var="assignment" items="${assignments}">
+								
 									<tr>
 										<td>${assignment.name}</td>
 										<td>${assignment.dueDate}</td>
-
+										<sec:authorize access="hasRole('ROLE_INSTR')">
+										<td>${assignment.status}</td>
+										</sec:authorize>
 										<td><a class="mr20"
 											href="<c:url value='/course/${course.id}/assignment/${assignment.id}' />">View</a>
 											<sec:authorize access="hasRole('ROLE_INSTR')">
@@ -50,6 +59,7 @@
 											</sec:authorize></td>
 
 									</tr>
+									
 									<sec:authorize access="hasRole('ROLE_INSTR')">
 										<form
 											action="<c:url value='/course/${course.id}/assignment/${assignment.id}'/>"
@@ -68,6 +78,7 @@
 									</script>
 									</sec:authorize>
 								</c:forEach>
+								</tbody>
 							</table>
 						</div>
 						<sec:authorize access="hasRole('ROLE_INSTR')">
@@ -76,7 +87,7 @@
 									<div class="col-sm-3">
 										<a
 											href="<c:url value='/course/${course.id}/assignments/new' />"
-											class="btn btn-danger ml20">Add Assignment</a>
+											class="btn btn-primary ml20">Add Assignment</a>
 									</div>
 								</div>
 							</div>

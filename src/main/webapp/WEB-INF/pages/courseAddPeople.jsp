@@ -35,7 +35,7 @@
 								<div class="col-sm-10 form-inline mb25">
 									<input type="text" class="form-control w200 ml25"
 										id="inputsearch" name="username" placeholder="Search Here">
-									<button type="submit" class="btn btn-danger ml20">Search</button>
+									<button type="submit" class="btn btn-primary ml20">Search</button>
 								</div>
 							</div>
 						</form>
@@ -66,11 +66,11 @@
 
 								<div class="form-group">
 									<div class="col-sm-6">
-										<a class="btn btn-danger ml20"
+										<a class="btn btn-primary ml20"
 											href="<c:url value='/course/${id}/people' />">Cancel</a>
 
 										<c:if test="${empty msg}">
-											<button type="submit" class="btn btn-danger ml30">Add
+											<button type="submit" class="btn btn-primary ml30">Add
 												to Course</button>
 										</c:if>
 
@@ -82,7 +82,7 @@
 							<div class="alert alert-danger">No result found!</div>
 							<div class="form-group">
 								<div class="col-sm-6">
-									<a class="btn btn-danger ml20"
+									<a class="btn btn-primary ml20"
 										href="<c:url value='/course/${id}/people' />">Cancel</a>
 								</div>
 							</div>

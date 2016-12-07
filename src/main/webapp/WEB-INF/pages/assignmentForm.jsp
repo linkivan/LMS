@@ -38,14 +38,14 @@
 							<label  class="col-sm-2 control-label ">Name:</label>
 							<div class="col-sm-3">
 								<input type="text" class="form-control" id="inputcode"
-									placeholder="Name" name='name'>
+									placeholder="Name" name='name' required>
 							</div>
 						</div>
 						<div class="form-group row">
 							<label for="inputcode" class="col-sm-2 control-label ">Due
 								Date:</label>
 							<div class="col-sm-3" data-provide="datepicker">
-								<input type="date" class="form-control" placeholder="mm/dd/yyyy" name='dueDate'>
+								<input type="date" class="form-control" placeholder="mm/dd/yyyy" name='dueDate' required>
 
 							</div>
 						</div>
@@ -53,7 +53,7 @@
 							<label for="inputPassword3" class="col-sm-2 control-label ">Status:
 							</label>
 							<div class="col-sm-3">
-								<select name="status" id="semester" class="form-control">
+								<select name="status" id="semester" class="form-control" required>
 									<option value="Published">Published</option>
 									<option value="Unpublished">Unpublished</option>
 
@@ -61,20 +61,20 @@
 							</div>
 						</div>
 						<div class="form-group row">
-							<label for="totalScore" class="col-sm-2 control-label ">Total
+							<label for="totalScore" class="col-sm-2 control-label" >Total
 								Score:</label>
 							<div class="col-sm-3">
 								<input type="text" class="form-control" id="totalScore" name="totalScore"
-									placeholder="Score">
+									placeholder="Score" required>
 							</div>
 						</div>
-						<div class="form-group row">
+						<!-- <div class="form-group row">
 							<label for="weight" class="col-sm-2 control-label ">Weight:</label>
 							<div class="col-sm-3">
 								<input type="text" class="form-control" id="weight" name="weight"
 									placeholder="Percentage">
 							</div>
-						</div>
+						</div> -->
 						<div class="form-group row" >
 							<label class="col-sm-2 control-label">Description:</label>
 							<div class="col-sm-3">
@@ -101,8 +101,8 @@
 						</div>
 						<div class="form-group row">
 							<div class="col-sm-offset-2 col-sm-3">
-								<button type="submit" class="btn btn-danger ml20">Submit</button>
-								<button type="button" class="btn btn-danger ml20" name="Cancel"
+								<button type="submit" class="btn btn-primary ml20">Submit</button>
+								<button type="button" class="btn btn-primary ml20" name="Cancel"
 									onclick="history.back()">Cancel</button>
 							</div>
 						</div>

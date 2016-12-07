@@ -40,7 +40,7 @@ CREATE TABLE `assignment` (
   KEY `fk_assignment_file1_idx` (`file_id`),
   CONSTRAINT `fk_assignment_course1` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_assignment_file1` FOREIGN KEY (`file_id`) REFERENCES `file` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -49,7 +49,6 @@ CREATE TABLE `assignment` (
 
 LOCK TABLES `assignment` WRITE;
 /*!40000 ALTER TABLE `assignment` DISABLE KEYS */;
-INSERT INTO `assignment` VALUES (1,'assignment1','2016-12-17','public','10',NULL,1,NULL,'',NULL),(2,'assignment1','2016-12-17','public','10','20%',1,NULL,'',NULL),(3,'assignment1','2016-12-17','public','10','20%',1,NULL,'',NULL),(4,'assignment1','2016-12-10','Published','10','20%',1,NULL,'File',NULL),(6,'assignment1','2016-12-10','Published','50','20%',12,NULL,'File','asaa'),(7,'assignment2','2016-12-08','Unpublished','10','30%',12,NULL,'Email','asa'),(8,'assignment3','2016-12-03','Published','100','5%',12,NULL,'Email','qsaas');
 /*!40000 ALTER TABLE `assignment` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -102,7 +101,7 @@ CREATE TABLE `course` (
   `code` varchar(45) NOT NULL,
   `semester` varchar(45) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -111,7 +110,6 @@ CREATE TABLE `course` (
 
 LOCK TABLES `course` WRITE;
 /*!40000 ALTER TABLE `course` DISABLE KEYS */;
-INSERT INTO `course` VALUES (1,'123e','14:00-15:00e','enpm611e','Summer2017'),(3,'123z','14:00-15:00','enpm614','Fall2016'),(4,'45321','45312','123','Fall2016'),(5,'5','5','5','Fall2016'),(6,'2','2','2','2'),(8,'66','66','667','Fall2016'),(9,'1212','1212','12','Select'),(10,'1212','1212','12','Select'),(12,'s4','14:00-15:00','enpm613','Fall2016'),(13,'541','4141','5','Winter2016');
 /*!40000 ALTER TABLE `course` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -125,10 +123,11 @@ DROP TABLE IF EXISTS `file`;
 CREATE TABLE `file` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `upload_time` datetime(6) NOT NULL,
-  `path` varchar(45) NOT NULL,
+  `file_path` varchar(250) NOT NULL,
   `uploader_name` varchar(45) NOT NULL,
+  `file_name` varchar(45) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -156,7 +155,7 @@ CREATE TABLE `syllabus` (
   KEY `fk_syllabus_course1_idx` (`course_id`),
   CONSTRAINT `fk_syllabus_course1` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_syllabus_file1` FOREIGN KEY (`file_id`) REFERENCES `file` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -223,7 +222,6 @@ CREATE TABLE `users_courses` (
 
 LOCK TABLES `users_courses` WRITE;
 /*!40000 ALTER TABLE `users_courses` DISABLE KEYS */;
-INSERT INTO `users_courses` VALUES (1,1,0),(1,3,0),(1,12,0),(3,1,0),(3,3,0),(3,12,0);
 /*!40000 ALTER TABLE `users_courses` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -236,4 +234,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-12-05 10:17:32
+-- Dump completed on 2016-12-07 15:21:41

@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -68,6 +69,7 @@ public class CourseController {
 	}
 
 	@RequestMapping(value = "/course/{id}", method = RequestMethod.GET)
+	@PreAuthorize("hasRole('ROLE_ADMIN') or @userService.isCurrentUserinCourse(authentication, #id)")
 	public ModelAndView coursePage(@PathVariable("id") int id) {
 		ModelAndView model = new ModelAndView();
 		CourseModel course = courseService.getCourseById(id);
@@ -112,73 +114,69 @@ public class CourseController {
 			@PathVariable("fileName") String fileName, String fileLocation) throws IOException {
 		// If user is not authorized - he should be thrown out from here itself
 		// Authorized user will download the file
-		
+
 		File file = new File(fileLocation + "/" + fileName);
-		
-		if(!file.exists()) {
-            System.out.println("File doesn't exist or, not found!");
-            // Throw an exception, or send 404 if file not found
-            response.sendError(HttpServletResponse.SC_NOT_FOUND); // 404.
-            return;
+
+		if (!file.exists()) {
+			System.out.println("File doesn't exist or, not found!");
+			// Throw an exception, or send 404 if file not found
+			response.sendError(HttpServletResponse.SC_NOT_FOUND); // 404.
+			return;
 		}
-		
-        String mimeType = servletContext.getMimeType(file.getName());
-        
-        if (mimeType == null) {
-            // set to binary type if MIME mapping not found
-            mimeType = "application/octet-stream";
-        }
-        
-        System.out.println("MIME type : " + mimeType);
-        
-        response.reset();
-        response.setContentType(mimeType);
-        response.setContentLength((int) file.length());
-        response.setHeader("Content-Disposition", "attachment; filename=\"" + file.getName() + "\"");
-        
-        System.out.println("File name           : " + file.getName());
-        System.out.println("File absolute path  : " + file.getAbsolutePath());
-        System.out.println("File canonical path : " + file.getCanonicalPath());
-        
-        OutputStream out = null;
-        
-        try {
-            FileInputStream in = new FileInputStream(file);
-            byte []         buffer = new byte[1024];
-            int             length = 0;
-            
-            out = response.getOutputStream();
-            while ((length = in.read(buffer)) > 0) {
-                out.write(buffer, 0, length);
-            }
-            in.close();
-            out.flush();
-        } catch (IOException err) {
-            err.printStackTrace();
-        } finally {
-            try {
-                if (out != null) {
-                    out.close();
-                    System.out.println("File downloaded successfully...");
-                }
-            } catch (IOException err) {
-                err.printStackTrace();
-            }
-        }
-        
-		/*
-		String dataDirectory = request.getServletContext().getRealPath(fileLocation);
-		Path file = Paths.get(dataDirectory, fileName);
-		if (Files.exists(file)) {
-			response.setContentType("application/pdf");
-			response.addHeader("Content-Disposition", "attachment; filename=" + fileName);
+
+		String mimeType = servletContext.getMimeType(file.getName());
+
+		if (mimeType == null) {
+			// set to binary type if MIME mapping not found
+			mimeType = "application/octet-stream";
+		}
+
+		System.out.println("MIME type : " + mimeType);
+
+		response.reset();
+		response.setContentType(mimeType);
+		response.setContentLength((int) file.length());
+		response.setHeader("Content-Disposition", "attachment; filename=\"" + file.getName() + "\"");
+
+		System.out.println("File name           : " + file.getName());
+		System.out.println("File absolute path  : " + file.getAbsolutePath());
+		System.out.println("File canonical path : " + file.getCanonicalPath());
+
+		OutputStream out = null;
+
+		try {
+			FileInputStream in = new FileInputStream(file);
+			byte[] buffer = new byte[1024];
+			int length = 0;
+
+			out = response.getOutputStream();
+			while ((length = in.read(buffer)) > 0) {
+				out.write(buffer, 0, length);
+			}
+			in.close();
+			out.flush();
+		} catch (IOException err) {
+			err.printStackTrace();
+		} finally {
 			try {
-				Files.copy(file, response.getOutputStream());
-				response.getOutputStream().flush();
-			} catch (IOException ex) {
-				ex.printStackTrace();
+				if (out != null) {
+					out.close();
+					System.out.println("File downloaded successfully...");
+				}
+			} catch (IOException err) {
+				err.printStackTrace();
 			}
 		}
-		*/
+
+		/*
+		 * String dataDirectory =
+		 * request.getServletContext().getRealPath(fileLocation); Path file =
+		 * Paths.get(dataDirectory, fileName); if (Files.exists(file)) {
+		 * response.setContentType("application/pdf");
+		 * response.addHeader("Content-Disposition", "attachment; filename=" +
+		 * fileName); try { Files.copy(file, response.getOutputStream());
+		 * response.getOutputStream().flush(); } catch (IOException ex) {
+		 * ex.printStackTrace(); } }
+		 */
 	}
 }

@@ -95,7 +95,7 @@
 							<div class="form-group">
 								<div class="col-sm-offset-2 col-sm-2 mln">
 									<a href="<c:url value='/course/${id}/people/new' />"
-										type="submit" class="btn btn-danger">Add People</a>
+										type="submit" class="btn btn-primary">Add People</a>
 								</div>
 							</div>
 						</sec:authorize>
