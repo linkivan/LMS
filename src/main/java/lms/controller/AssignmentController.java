@@ -1,5 +1,8 @@
 package lms.controller;
 
+import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.fileupload.FileItem;
@@ -103,40 +106,41 @@ public class AssignmentController {
 		return "redirect:/course/" + courseId + "/assignment/" + id;
 	}
 
-	// @Secured("ROLE_STU")
-	// @RequestMapping(value = "/assignment/{id}/response/new", method =
-	// RequestMethod.GET)
-	// public String submitResponsePage(@PathVariable("id") int assignmentId,
-	// Authentication authentication) {
-	// ModelAndView model = new ModelAndView();
-	//
-	// return null;
-	// }
+	@Secured("ROLE_STU")
+	@RequestMapping(value = "/assignment/{id}/response", method = RequestMethod.GET)
+	public ModelAndView submitResponsePage(@PathVariable("courseId") int courseId, @PathVariable("id") int assignmentId,
+			Authentication authentication) {
+		ModelAndView model = new ModelAndView();
+		CourseModel course = courseService.getCourseById(courseId);
+		AssignmentModel assignment = assignmentService.getAssignmentById(assignmentId);
+		AssignResponseModel r = gradeService.getByUserIdAndAssignId(((UserModel) authentication.getPrincipal()).getId(),
+				assignmentId);
+		FileModel file = null;
+		if (r != null) {
+			file = fileService.getFileByFileId(r.getFileId());
+		}
+		model.addObject("uiMenu", new UIMenu(course.getCode(), 2, true));
+		model.addObject("course", course);
+		model.addObject("file", file);
+		model.addObject("assignment", assignment);
+		model.addObject("assignmentId", assignmentId);
+		model.setViewName("assignmentResponseForm");
+		return model;
+	}
 
-	// @Secured("ROLE_STU")
-	//
-	// @RequestMapping(value = "/assignment/{id}", method = RequestMethod.POST)
-	// public String submitAssignResponse(@PathVariable("id") int assignmentId,
-	//
-	// @RequestParam CommonsMultipartFile fileUpload, Authentication
-	// authentication) {
-	//
-	// AssignmentModel assignment =
-	// assignmentService.getAssignmentById(assignmentId);
-	// AssignResponseModel assignRes = new AssignResponseModel();
-	// CourseModel course =
-	// courseService.getCourseById(assignment.getCourseId());
-	// FileItem response = fileUpload.getFileItem();
-	// int assignResFileId = fileService.createAssignmentResponse(response,
-	// course, assignment.getName(),
-	// authentication.getName());
-	// int userId = ((UserModel) authentication.getPrincipal()).getId();
-	// assignRes.setFileId(assignResFileId);
-	// assignRes.setUserId(userId);
-	// assignmentService.submitAssignResponse(assignRes);
-	//
-	// return "redirect:/course/" + course.getId() + "/assignment/" +
-	// assignmentId;
-	// }
+	@Secured("ROLE_STU")
+
+	@RequestMapping(value = "/assignment/{id}/response", method = RequestMethod.POST)
+	public String submitAssignResponse(@PathVariable("id") int assignmentId, @PathVariable("courseId") int courseId,
+			@RequestParam CommonsMultipartFile fileUpload, Authentication authentication,
+			AssignResponseModel assignRes) {
+		FileItem responseFile = fileUpload.getFileItem();
+		assignRes.setAssignmentId(assignmentId);
+		assignRes.setCourseId(courseId);
+		assignRes.setUserId(((UserModel) authentication.getPrincipal()).getId());
+		assignRes.setSubmitTime(new Timestamp(new Date().getTime()));
+		assignmentService.submitAssignResponse(assignRes, responseFile);
+		return "redirect:/course/" + courseId + "/assignment/" + assignmentId + "/response";
+	}
 
 }

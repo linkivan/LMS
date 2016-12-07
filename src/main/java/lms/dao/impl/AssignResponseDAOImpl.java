@@ -24,27 +24,35 @@ public class AssignResponseDAOImpl implements AssignResponseDAO {
 
 	@Override
 	public boolean addAssignResponse(final AssignResponseModel assignRes) {
-		final String sql = "INSERT INTO assignment_response (user_id, assignment_id, course_id, file_id, submit_time, grade)"
-				+ "VALUES (?, ?, ?, ?, ?, ?)";
-		KeyHolder keyHolder = new GeneratedKeyHolder();
-		jdbcTemplate.update(new PreparedStatementCreator() {
+		if (!isExistByUserIdAndAssignId(assignRes.getUserId(), assignRes.getAssignmentId())) {
+			final String sql = "INSERT INTO assignment_response (user_id, assignment_id, course_id, file_id, submit_time, grade)"
+					+ "VALUES (?, ?, ?, ?, ?, ?)";
+			KeyHolder keyHolder = new GeneratedKeyHolder();
+			jdbcTemplate.update(new PreparedStatementCreator() {
 
-			@Override
-			public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
-				PreparedStatement ps = con.prepareStatement(sql, new String[] { "user_id", "assignment_id" });
+				@Override
+				public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
+					PreparedStatement ps = con.prepareStatement(sql, new String[] { "user_id", "assignment_id" });
 
-				ps.setInt(1, assignRes.getUserId());
-				ps.setInt(2, assignRes.getAssignmentId());
-				ps.setInt(3, assignRes.getCourseId());
-				ps.setInt(4, assignRes.getFileId());
-				ps.setTimestamp(5, assignRes.getSubmitTime());
-				ps.setInt(6, assignRes.getGrade());
+					ps.setInt(1, assignRes.getUserId());
+					ps.setInt(2, assignRes.getAssignmentId());
+					ps.setInt(3, assignRes.getCourseId());
+					ps.setInt(4, assignRes.getFileId());
+					ps.setTimestamp(5, assignRes.getSubmitTime());
+					ps.setInt(6, assignRes.getGrade());
 
-				return ps;
-			}
+					return ps;
+				}
 
-		}, keyHolder);
-		return true;
+			}, keyHolder);
+
+			return true;
+		} else {
+			final String sql = "UPDATE assignment_response set  file_id = ? WHERE  user_id =? and assignment_id =?";
+
+			jdbcTemplate.update(sql, assignRes.getFileId(), assignRes.getUserId(), assignRes.getAssignmentId());
+			return true;
+		}
 	}
 
 	@Override
@@ -65,25 +73,34 @@ public class AssignResponseDAOImpl implements AssignResponseDAO {
 	@Override
 	public AssignResponseModel getByUserIdAndAssignId(int userId, int assignmentId) {
 		String sql = "SELECT * FROM assignment_response WHERE user_id = ? AND assignment_id = ?";
-		AssignResponseModel assignRes = jdbcTemplate.queryForObject(sql, new Object[] { userId, assignmentId },
-				new RowMapper<AssignResponseModel>() {
+		AssignResponseModel assignRes = null;
+		if (isExistByUserIdAndAssignId(userId, assignmentId)) {
+			assignRes = jdbcTemplate.queryForObject(sql, new Object[] { userId, assignmentId },
+					new RowMapper<AssignResponseModel>() {
 
-					@Override
-					public AssignResponseModel mapRow(ResultSet rs, int rowNum) throws SQLException {
-						AssignResponseModel assignRes = new AssignResponseModel();
+						@Override
+						public AssignResponseModel mapRow(ResultSet rs, int rowNum) throws SQLException {
+							AssignResponseModel assignRes = new AssignResponseModel();
 
-						assignRes.setUserId(rs.getInt("user_id"));
-						assignRes.setAssignmentId(rs.getInt("assignment_id"));
-						assignRes.setCourseId(rs.getInt("course_id"));
-						assignRes.setFileId(rs.getInt("file_id"));
-						assignRes.setSubmitTime(rs.getTimestamp("submit_time"));
-						assignRes.setGrade(rs.getInt("grade"));
+							assignRes.setUserId(rs.getInt("user_id"));
+							assignRes.setAssignmentId(rs.getInt("assignment_id"));
+							assignRes.setCourseId(rs.getInt("course_id"));
+							assignRes.setFileId(rs.getInt("file_id"));
+							assignRes.setSubmitTime(rs.getTimestamp("submit_time"));
+							assignRes.setGrade(rs.getInt("grade"));
 
-						return assignRes;
-					}
+							return assignRes;
+						}
 
-				});
+					});
+		}
 		return assignRes;
+	}
+
+	private boolean isExistByUserIdAndAssignId(int userId, int assignmentId) {
+		String sql = "SELECT count(*) FROM assignment_response WHERE user_id = ? AND assignment_id = ?";
+		Integer count = jdbcTemplate.queryForObject(sql, new Object[] { userId, assignmentId }, Integer.class);
+		return count != 0;
 	}
 
 	@Override
@@ -96,14 +113,14 @@ public class AssignResponseDAOImpl implements AssignResponseDAO {
 					@Override
 					public AssignResponseModel mapRow(ResultSet rs, int rowNum) throws SQLException {
 						AssignResponseModel assignRes = new AssignResponseModel();
-						
+
 						assignRes.setUserId(rs.getInt("user_id"));
 						assignRes.setAssignmentId(rs.getInt("assignment_id"));
 						assignRes.setCourseId(rs.getInt("course_id"));
 						assignRes.setFileId(rs.getInt("file_id"));
 						assignRes.setSubmitTime(rs.getTimestamp("submit_time"));
 						assignRes.setGrade(rs.getInt("grade"));
-						
+
 						return assignRes;
 					}
 

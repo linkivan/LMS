@@ -31,8 +31,8 @@
 							<div class="form-group">
 								<label for="inputcode" class="col-sm-2 control-label ">
 									Current Syllabus </label>
-								<div class="col-sm-3">
-									<a class="col-sm-2 control-label " href="<c:url value='/course/${course.id}/files/${syllabus.fileName}?fileLocation=${syllabus.filePath}' />">${syllabus.fileName}</a><br />
+								<div class="col-sm-10">
+									<a class="control-label " href="<c:url value='/course/${course.id}/files/${syllabus.fileName}?fileLocation=${syllabus.filePath}' />">${syllabus.fileName}</a><br />
 								</div>
 							</div>
 							</c:if>
@@ -56,8 +56,8 @@
 							method="get">
 							<c:if test="${not empty syllabus}">
 							<div class="form-group">
-								<div class="col-sm-3">
-									<a class="col-sm-2 control-label " href="<c:url value='/course/${course.id}/files/${syllabus.fileName}?fileLocation=${syllabus.filePath}' />">${syllabus.fileName}</a>
+								<div class="col-sm-10">
+									<a class="control-label " href="<c:url value='/course/${course.id}/files/${syllabus.fileName}?fileLocation=${syllabus.filePath}' />">${syllabus.fileName}</a>
 
 								</div>
 							</div>

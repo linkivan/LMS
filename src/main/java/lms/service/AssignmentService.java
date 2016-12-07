@@ -19,6 +19,6 @@ public interface AssignmentService {
 
 	public List<AssignmentModel> getAssignmentByCourseId(int courseId);
 
-	public boolean submitAssignResponse(AssignResponseModel assignmentResponse);
+	public boolean submitAssignResponse(AssignResponseModel assignmentResponse, FileItem assignmentFile);
 
 }

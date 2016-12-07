@@ -17,6 +17,7 @@ import lms.model.AssignResponseModel;
 import lms.model.AssignmentModel;
 import lms.model.CourseModel;
 import lms.model.FileModel;
+import lms.model.UserModel;
 import lms.service.AssignmentService;
 import lms.service.FileService;
 
@@ -97,8 +98,18 @@ public class AssignmentServiceImpl implements AssignmentService {
 	}
 
 	@Override
-	public boolean submitAssignResponse(AssignResponseModel assignmentResponse) {
+	public boolean submitAssignResponse(AssignResponseModel assignmentResponse, FileItem assignmentResponseFile) {
+		int assignResFileId = 0;
+		CourseModel course = courseDAO.getCourseById(assignmentResponse.getCourseId());
 
+		try {
+			assignResFileId = fileService.createAssignmentResponse(assignmentResponseFile, course,
+					getAssignmentById(assignmentResponse.getAssignmentId()).getName(), this.currentUserName());
+			assignmentResponse.setFileId(assignResFileId);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return assignResponseDAO.addAssignResponse(assignmentResponse);
 	}
 

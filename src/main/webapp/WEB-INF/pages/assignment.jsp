@@ -173,8 +173,8 @@
 								</div>
 								<div class="form-group">
 									<div class="col-sm-offset-2 col-sm-3">
-										<button type="submit" class="btn btn-danger ml20">Submit
-											Assignment</button>
+										<a href="<c:url value='/course/${course.id}/assignment/${assignment.id}/response' />"" class="btn btn-danger ml20">Submit
+											Assignment</a>
 
 									</div>
 								</div>
