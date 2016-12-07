@@ -30,7 +30,7 @@
 							<label for="inputcode" class="col-sm-2 control-label ">Response
 							</label>
 							<div class="col-sm-3">
-								<a  class="col-sm-2 control-label " href="">assignment1_student1.doc</a>
+								<a class="col-sm-8 control-label" href="<c:url value='/course/${course.id}/files/${file.fileName}?fileLocation=${file.filePath}' />">${file.fileName}</a>
 							</div>
 						</div>
 						</c:if>

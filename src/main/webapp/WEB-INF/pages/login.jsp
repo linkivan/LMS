@@ -40,7 +40,7 @@
                                     </div> -->
                                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                                     <!-- Change this to a button or input when using this as a form -->
-                                    <input name="submit" type="submit" value="Login" class="btn btn-lg btn-success btn-block">
+                                    <input name="submit" type="submit" value="Login" class="btn btn-lg btn-primary btn-block">
                                 </fieldset>
                             </form>
                         </div>
