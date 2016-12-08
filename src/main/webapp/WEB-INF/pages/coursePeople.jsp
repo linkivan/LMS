@@ -27,6 +27,7 @@
 					<div class="msg"></div>
 					<div id="people">
 						<div class="form-group">
+						<c:if test="${not empty instructors or not empty students}">
 							<table class="table-hover table-striped table-border table w450">
 								<tr>
 									<th>User Name</th>
@@ -90,7 +91,11 @@
 									</sec:authorize>
 								</c:forEach>
 							</table>
+						</c:if>
 						</div>
+						<c:if test="${ empty instructors and empty students}">
+							<div class="alert alert-danger">No Result found!</div>
+						</c:if>
 						<sec:authorize access="hasRole('ROLE_ADMIN')">
 							<div class="form-group">
 								<div class="col-sm-offset-2 col-sm-2 mln">

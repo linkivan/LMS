@@ -117,6 +117,7 @@ public class UserController {
 		model.addObject("uiMenu", new UIMenu(course.getCode(), 2, true));
 		model.addObject("course", course);
 		model.addObject("user", user);
+		model.addObject("query", username);
 		model.setViewName("courseAddPeople");
 		return model;
 	}

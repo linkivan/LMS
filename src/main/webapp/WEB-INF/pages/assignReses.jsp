@@ -31,6 +31,7 @@
 										<!-- /.panel-heading -->
 										<div class="panel-body">
 											<div class="table-responsive">
+											<c:if test="${not empty assignReses}">
 												<table class="table table-hover table-striped ">
 													<thead>
 														<tr>
@@ -51,6 +52,10 @@
 														</c:forEach>
 													</tbody>
 												</table>
+											</c:if>
+											<c:if test="${empty assignReses}">
+												<div class="alert alert-danger">No Result found!</div>
+											</c:if>
 											</div>
 											<!-- /.table-responsive -->
 										</div>

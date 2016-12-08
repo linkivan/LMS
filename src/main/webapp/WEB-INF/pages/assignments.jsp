@@ -32,6 +32,7 @@
 
 					<div>
 						<div id="courses" class="panel-heading">
+						<c:if test="${not empty assignments}">
 							<table class="table table-striped table-hover">
 							<thead>
 								<tr>
@@ -80,6 +81,10 @@
 								</c:forEach>
 								</tbody>
 							</table>
+						</c:if>
+						<c:if test="${empty assignments}">
+							<div class="alert alert-danger">No Result found!</div>
+						</c:if>
 						</div>
 						<sec:authorize access="hasRole('ROLE_INSTR')">
 							<div id="search panel">

@@ -87,6 +87,9 @@
 							</table>
 						</div>
 					</c:if>
+					<c:if test="${empty code and  empty semester}">
+						<div class="alert alert-info">You can search or add a course. </div>
+					</c:if>
 					<c:if test="${empty courses and (not empty code or  not empty semester)}">
 						<div class="alert alert-danger">No course found! Please change your parameters or add a course!</div>
 					</c:if>

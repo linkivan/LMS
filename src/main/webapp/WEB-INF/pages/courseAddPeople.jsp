@@ -34,7 +34,7 @@
 							<div class="form-group">
 								<div class="col-sm-10 form-inline mb25">
 									<input type="text" class="form-control w200 ml25"
-										id="inputsearch" name="username" placeholder="Search Here">
+										id="inputsearch" name="username" placeholder="Search Here" required>
 									<button type="submit" class="btn btn-primary ml20">Search</button>
 								</div>
 							</div>
@@ -78,7 +78,7 @@
 								</div>
 							</form>
 						</c:if>
-						<c:if test="${empty user}">
+						<c:if test="${empty user and not empty query}">
 							<div class="alert alert-danger">No result found!</div>
 							<div class="form-group">
 								<div class="col-sm-6">
@@ -87,7 +87,9 @@
 								</div>
 							</div>
 						</c:if>
-
+						<c:if test="${empty query}">
+							<div class="alert alert-info">Please search a user by username to add to the course!</div>
+						</c:if>
 					</div>
 
 				</div>
