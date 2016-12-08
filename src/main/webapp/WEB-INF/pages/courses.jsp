@@ -66,7 +66,7 @@
 										<td>${courses.id}</td>
 										<td>${courses.code}</td>
 										<td>${courses.semester}</td>
-										<td><a href="<c:url value='/course/${courses.id}' />">View</a>
+										<td><a href="<c:url value='/course/${courses.id}/information' />">View</a>
 											<a id="delete-course" href="javascript:formSubmit()">Delete</a>
 										</td>
 									</tr>

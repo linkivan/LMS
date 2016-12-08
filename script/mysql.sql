@@ -38,9 +38,9 @@ CREATE TABLE `assignment` (
   PRIMARY KEY (`id`),
   KEY `fk_assignment_course1_idx` (`course_id`),
   KEY `fk_assignment_file1_idx` (`file_id`),
-  CONSTRAINT `fk_assignment_course1` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_assignment_file1` FOREIGN KEY (`file_id`) REFERENCES `file` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
+  CONSTRAINT `fk_assignment_course1` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `fk_assignment_file1` FOREIGN KEY (`file_id`) REFERENCES `file` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -71,10 +71,10 @@ CREATE TABLE `assignment_response` (
   KEY `fk_user_has_assignment_user1_idx` (`user_id`),
   KEY `fk_user_has_assignment_course1_idx` (`course_id`),
   KEY `fk_user_has_assignment_file1_idx` (`file_id`),
-  CONSTRAINT `fk_user_has_assignment_assignment1` FOREIGN KEY (`assignment_id`) REFERENCES `assignment` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_user_has_assignment_course1` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_user_has_assignment_file1` FOREIGN KEY (`file_id`) REFERENCES `file` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_user_has_assignment_user1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `fk_user_has_assignment_assignment1` FOREIGN KEY (`assignment_id`) REFERENCES `assignment` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `fk_user_has_assignment_course1` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `fk_user_has_assignment_file1` FOREIGN KEY (`file_id`) REFERENCES `file` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `fk_user_has_assignment_user1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -101,7 +101,7 @@ CREATE TABLE `course` (
   `code` varchar(45) NOT NULL,
   `semester` varchar(45) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -127,7 +127,7 @@ CREATE TABLE `file` (
   `uploader_name` varchar(45) NOT NULL,
   `file_name` varchar(45) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -153,9 +153,9 @@ CREATE TABLE `syllabus` (
   PRIMARY KEY (`id`),
   KEY `fk_syllabus_file1_idx` (`file_id`),
   KEY `fk_syllabus_course1_idx` (`course_id`),
-  CONSTRAINT `fk_syllabus_course1` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_syllabus_file1` FOREIGN KEY (`file_id`) REFERENCES `file` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+  CONSTRAINT `fk_syllabus_course1` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `fk_syllabus_file1` FOREIGN KEY (`file_id`) REFERENCES `file` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -193,7 +193,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'student1','1518596cc02033138901826200c26c60',1,'ROLE_STU',1,0),(2,'admin','b594510740d2ac4261c1b2fe87850d08',1,'ROLE_ADMIN',1,0),(3,'instructor1','e820b3ccd0518ef85581594be163fb92',1,'ROLE_INSTR',1,0),(4,'instructor2','d1d664b63ca62c765efc46705bbd4eb9',1,'ROLE_INSTR',1,0),(5,'student2','a47dba34dd6dc11e1a62f3d48c585bd7',1,'ROLE_STU',1,0);
+INSERT INTO `user` VALUES (1,'student1','1518596cc02033138901826200c26c60',1,'ROLE_STU',0,3),(2,'admin','b594510740d2ac4261c1b2fe87850d08',1,'ROLE_ADMIN',1,0),(3,'instructor1','e820b3ccd0518ef85581594be163fb92',1,'ROLE_INSTR',1,0),(4,'instructor2','d1d664b63ca62c765efc46705bbd4eb9',1,'ROLE_INSTR',1,0),(5,'student2','a47dba34dd6dc11e1a62f3d48c585bd7',1,'ROLE_STU',1,0);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -211,8 +211,8 @@ CREATE TABLE `users_courses` (
   PRIMARY KEY (`user_id`,`course_id`),
   KEY `fk_user_has_course_course1_idx` (`course_id`),
   KEY `fk_user_has_course_user_idx` (`user_id`),
-  CONSTRAINT `fk_user_has_course_course1` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_user_has_course_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `fk_user_has_course_course1` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `fk_user_has_course_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -234,4 +234,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-12-07 15:21:41
+-- Dump completed on 2016-12-08 13:41:08
