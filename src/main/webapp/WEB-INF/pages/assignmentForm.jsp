@@ -64,7 +64,7 @@
 							<label for="totalScore" class="col-sm-2 control-label" >Total
 								Score:</label>
 							<div class="col-sm-3">
-								<input type="text" class="form-control" id="totalScore" name="totalScore"
+								<input type="number" class="form-control" id="totalScore" name="totalScore"
 									placeholder="Score" required>
 							</div>
 						</div>
