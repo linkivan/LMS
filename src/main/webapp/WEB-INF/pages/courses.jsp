@@ -34,12 +34,12 @@
 							class="form-inline">
 							<div class="form-group">
 								<label for="code">Code: </label> <input type="text" id="code"
-									name="code" class="form-control">
+									name="code" class="form-control" required>
 							</div>
 							<div class="form-group ml20">
 								<label for="code">Semester: </label> <select name="semester"
-									id="semester" class="form-control">
-									<option value="Select">Select</option>
+									id="semester" class="form-control" required>
+									<option value="">Select</option>
 									<option value="Fall2016">Fall2016</option>
 									<option value="Winter2016">Winter2016</option>
 									<option value="Spring2017">Spring2017</option>
@@ -87,7 +87,7 @@
 							</table>
 						</div>
 					</c:if>
-					<c:if test="${empty courses}">
+					<c:if test="${empty courses and (not empty code or  not empty semester)}">
 						<div class="alert alert-danger">No course found! Please change your parameters or add a course!</div>
 					</c:if>
 				</sec:authorize>
@@ -95,7 +95,7 @@
 					<c:if test="${ not empty courses}">
 						<c:forEach var="course" items="${courses}">
 							<ul class="list-group">
-							  <li class="list-group-item"><a href="<c:url value='/course/${course.id}' />">${course.code} - ${course.semester}</a></li>
+							  <li class="list-group-item"><a href="<c:url value='/course/${course.id}/information' />">${course.code} - ${course.semester}</a></li>
 							</ul>
 						</c:forEach>
 					</c:if>

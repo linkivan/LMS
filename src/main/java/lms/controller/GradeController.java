@@ -78,13 +78,18 @@ public class GradeController {
 			return model;
 		} else {
 			ModelAndView model = new ModelAndView();
+			List<AssignmentModel> assignments = assignmentService.getAssignmentByCourseId(courseId);
+			Map<Integer, String> assignMap = new HashMap<Integer, String>();
+			for (AssignmentModel assignment : assignments) {
+				assignMap.put(assignment.getId(), assignment.getName());
+			}
 			List<AssignResponseModel> assignReses = gradeService
 					.getResponsesByUserIdAndCourseId(((UserModel) authentication.getPrincipal()).getId(), courseId);
 			CourseModel course = courseService.getCourseById(courseId);
 			model.addObject("uiMenu", new UIMenu(course.getCode(), 3, true));
 			model.addObject("course", course);
 			model.addObject("assignReses", assignReses);
-
+			model.addObject("assignMap", assignMap);
 			model.setViewName("assignReses");
 			return model;
 		}

@@ -31,20 +31,22 @@
 										<!-- /.panel-heading -->
 										<div class="panel-body">
 											<div class="table-responsive">
-												<table class="table table-hover  ">
+												<table class="table table-hover table-striped ">
 													<thead>
 														<tr>
-															<th class="mw30">Assignment id</th>
-															<th class="mw30">Grade</th>
+															<th class="mw30">Assignment</th>
 															<th class="mw30">Submit time</th>
+															<th class="mw30">Grade</th>
+															
 														</tr>
 													</thead>
 													<tbody>
 														<c:forEach var="assignReses" items="${assignReses}">
 															<tr>
-																<td>${assignReses.assignmentId}</td>
-																<td>${assignReses.grade}</td>
+																<td>${assignMap[assignReses.assignmentId]}</td>
 																<td>${assignReses.submitTime}</td>
+																<td>${assignReses.grade}</td>
+																
 															</tr>
 														</c:forEach>
 													</tbody>

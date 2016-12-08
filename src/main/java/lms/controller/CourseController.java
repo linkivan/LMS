@@ -36,7 +36,12 @@ public class CourseController {
 	@Autowired
 	private ServletContext servletContext;
 
-	@RequestMapping(value = "/courses", method = RequestMethod.GET)
+	@RequestMapping(value = { "/" }, method = RequestMethod.GET)
+	public String dashboardPage() {
+		return "redirect:/courses/";
+	}
+
+	@RequestMapping(value = { "/courses" }, method = RequestMethod.GET)
 	public ModelAndView coursesPage(String code, String semester, Authentication authentication) {
 		ModelAndView model = new ModelAndView();
 		List<CourseModel> courses;
@@ -47,6 +52,8 @@ public class CourseController {
 		}
 		model.addObject("uiMenu", new UIMenu("", 0, false));
 		model.addObject("courses", courses);
+		model.addObject("code", code);
+		model.addObject("semester", semester);
 		model.setViewName("courses");
 		return model;
 	}
@@ -68,7 +75,7 @@ public class CourseController {
 
 	}
 
-	@RequestMapping(value = "/course/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = { "/course/{id}", "/course/{id}/information" }, method = RequestMethod.GET)
 	@PreAuthorize("hasRole('ROLE_ADMIN') or @userService.isCurrentUserinCourse(authentication, #id)")
 	public ModelAndView coursePage(@PathVariable("id") int id) {
 		ModelAndView model = new ModelAndView();

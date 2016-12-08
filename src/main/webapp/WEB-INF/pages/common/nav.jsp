@@ -53,7 +53,7 @@
 						</span>
 					</div>
 				</li> -->
-				<li><a href="<c:url value='/courses' />" class="active"><i
+				<li><a href="<c:url value='/courses' />" ><i
 						class="fa fa-dashboard fa-fw"></i> Dashboard</a></li>
 				<c:if test="${uiMenu.showCourse}">
 					<li>
@@ -62,7 +62,7 @@
 						</a>
 						<ul class="nav nav-second-level">
 							<li>
-								<a href="<c:url value='/course/${course.id}' />">INFORMATION</a>
+								<a href="<c:url value='/course/${course.id}/information' />">INFORMATION</a>
 							</li>
 							<li>
 								<a href="<c:url value='/course/${course.id}/people' />">PEOPLE</a>
