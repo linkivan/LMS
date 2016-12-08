@@ -125,7 +125,7 @@ CREATE TABLE `file` (
   `upload_time` datetime(6) NOT NULL,
   `file_path` varchar(250) NOT NULL,
   `uploader_name` varchar(45) NOT NULL,
-  `file_name` varchar(45) NOT NULL,
+  `file_name` varchar(150) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
